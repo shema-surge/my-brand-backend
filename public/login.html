@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <a href="./index.html">
+        <div class="backBtn">
+            <i class="fa-solid fa-arrow-left"></i>
+            <p>Back</p>
+        </div>
+    </a>
+    <div class="loginContainer">
+        <h1>Log in</h1>
+        <div class="errMessage">
+        </div>
+        <form action="/login" method="post" class="form">
+            <label for="emailInput">Email</label>
+            <div class="inputContainer">
+                <input type="email" name="email" id="emailInput" required>
+                <p id="emailValidationErr"></p>
+            </div>
+
+            <label for="passwdInput">Password</label>
+            <div class="inputContainer">
+                <input type="password" name="password" id="passwdInput" required>
+                <p id="passwdValidationErr"></p>
+            </div>
+
+            <a href="#">Forgot Password?</a>
+            <button type="submit" class="btn">Login</button>
+            <a class="signupLink" href="./signup.html">Create Account</a>
+        </form>
+    </div>
+</body>
+<script src="https://kit.fontawesome.com/3f2aa35973.js" crossorigin="anonymous"></script>
+<script src="./js/validation.js"></script>
+<script src="./js/login.js"></script>
+</html>

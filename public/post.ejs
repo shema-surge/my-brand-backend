@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/post.css" />
+  </head>
+  <body>
+    <div class="mobileHeader">
+      <div class="backBtn">
+        <i class="fa-solid fa-xmark"></i>
+        <p>close</p>
+      </div>
+      <nav class="mobileNavigation">
+        <ul>
+          <li>
+            <a class="nav-item" href="./index.html#aboutSection"
+              >About
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./index.html#projectsSection"
+              >My Work
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./blog.html"
+              >Blog
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./index.html#contactSection"
+              >Contact Me
+              <div></div
+            ></a>
+          </li>
+        </ul>
+      </nav>
+
+      <div id="mobile-screen-profile" class="profileContainer">
+        <div>
+          <img src="./images/<%=user.profileImg>" alt="" />
+          <p><%=user.name%></p>
+        </div>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="mobileProfileOptions">
+        <a href="./dashboard.html">Dashboard</a>
+        <a href="./blog.html">Log out</a>
+      </div>
+    </div>
+    <header>
+      <nav class="navigation">
+        <ul>
+          <li>
+            <a class="nav-item" href="./index.html#aboutSection"
+              >About
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./index.html#projectsSection"
+              >My Work
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./blog.html"
+              >Blog
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./index.html#contactSection"
+              >Contact Me
+              <div></div
+            ></a>
+          </li>
+        </ul>
+      </nav>
+      <div class="menu">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <div class="profileOptions">
+        <a href="./dashboard.html">Dashboard</a>
+        <a href="./blog.html">Logout</a>
+      </div>
+      <div id="wide-screen-profile" class="profileContainer">
+        <div hx-get="/userProfile">
+          <img src="./images/<%=user.profileImg>" alt="" />
+          <p><%=user.name%></p>
+        </div>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+    </header>
+    <main>
+      <div class="postContainer">
+        <h1><%= post.title%></h1>
+        <p class="postDate">Published on: <%= new Date(post.createdAt).toLocaleString()%></p>
+        <%- post.content%>
+        <div class="stats">
+          <div>
+            <i class="fa-regular fa-heart"></i>
+            <p><%= post.likes%> likes</p>
+          </div>
+          <div>
+            <i class="fa-regular fa-comment"></i>
+            <p><%= post.comments%> comments</p>
+          </div>
+        </div>
+      </div>
+      <div class="commentSection">
+        <div class="commentContainer">
+          <p>Comments (6)</p>
+          <form class="commentForm" action="/newComment?pid=<%= post._id%>" method="post">
+            <textarea
+              name="content"
+              id=""
+              cols="30"
+              rows="10"
+              placeholder="Add your comment"
+            ></textarea>
+            <button class="btn" type="submit">comment</button>
+          </form>
+        </div>
+        <div class="comments">
+          <% if(comments.length===0){%>
+            <p class="errMessage">No Comments yet!</p>
+          <% } else{ comments.forEach(comment=>{%>
+          <div class="comment">
+            <div class="commentInfo">
+              <div class="profile" hx-get="/userProfile" hx-trigger="load" hx-swap="innerHTML">
+                <img src="./images/User-Profile-PNG-Image 1.png" alt="" />
+                <p>jackTheCoder</p>
+              </div>
+              <p><%= new Date(comment.createdAt).toLocaleString() %></p>
+            </div>
+            <p>
+              <%= comment.content%>
+            </p>
+            <div class="stats">
+              <div>
+                <i class="fa-regular fa-heart"></i>
+                <p><%= comment.likes%> likes</p>
+              </div>
+              <div>
+                <i class="fa-regular fa-message"></i>
+                <p>Reply</p>
+              </div>
+            </div>
+          </div>
+          <% })} %>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script
+    src="https://kit.fontawesome.com/3f2aa35973.js"
+    crossorigin="anonymous"
+  ></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/htmx.min.js"></script>
+</html>

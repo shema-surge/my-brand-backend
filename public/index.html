@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Brand</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="mobileHeader">
+      <div class="backBtn">
+        <i class="fa-solid fa-xmark"></i>
+        <p>close</p>
+      </div>
+      <nav class="mobileNavigation">
+        <ul>
+          <li>
+            <a class="nav-item" href="#aboutSection"
+              >About
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="#projectsSection"
+              >My Work
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./blog"
+              >Blog
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="#contactSection"
+              >Contact Me
+              <div></div
+            ></a>
+          </li>
+        </ul>
+      </nav>
+      <a id="mobileLoginBtn" class="btn" href="/login">Login</a>
+    </div>
+    <header>
+      <nav class="navigation">
+        <ul>
+          <li>
+            <a class="nav-item" href="#aboutSection"
+              >About
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="#projectsSection"
+              >My Work
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="./blog"
+              >Blog
+              <div></div
+            ></a>
+          </li>
+          <li>
+            <a class="nav-item" href="#contactSection"
+              >Contact Me
+              <div></div
+            ></a>
+          </li>
+        </ul>
+      </nav>
+      <a id="loginBtn" class="btn" href="./login">Login</a>
+      <div class="menu">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </header>
+    <main>
+      <div class="introSection">
+        <div class="introText">
+          <p>Hi, my name is</p>
+          <h1>SHEMA SERGE</h1>
+          <p>
+            I’m a web developer/tech enthusiast based in KIGALI, RWANDA and I
+            love building cool tech projects that improve people’s lives.
+          </p>
+        </div>
+        <div class="imgSection">
+          <img src="./images/mypic2.jpeg" alt="" />
+        </div>
+      </div>
+      <div id="aboutSection" class="aboutSection">
+        <div class="about">
+          <h2>About Me</h2>
+          <p>
+            Growing up, I was fascinated by computers and how they worked so
+            naturally, I decided to give programming a try when i was still in
+            high school and I’ve doing it since then.I have worked on many cool
+            projects some of which are listed below this section.<br><br>  I am very
+            passionate about full-stack web development so if you ever want to
+            collaborate or hire me please contact me bellow :)
+          </p>
+          <a class="btn" href="#contactSection">Contact Me</a>
+        </div>
+        <div class="skills">
+          <h2>Skills</h2>
+          <div>
+            <p>HTML</p>
+            <p>CSS</p>
+            <p>Javascript</p>
+            <p>Nodejs</p>
+            <p>Expressjs</p>
+            <p>MongoDB</p>
+            <p>Git</p>
+            <p>Docker</p>
+            <p>Go</p>
+            <p>Figma</p>
+          </div>
+        </div>
+      </div>
+      <div id="projectsSection" class="projectsSection">
+        <h1>My Work</h1>
+        <div class="projects">
+          <div class="project">
+            <h2>PCOS Detection</h2>
+            <p>This is a Django app that uses the Numpy,Pandas and Scikit-Learn to predict if a person is more likely to suffer from  Polystatic Ovary Syndrome based on symptoms and other data.</p>
+            <a class="btn" href="#">Github Repo</a>
+          </div>
+          <div class="project">
+            <h2>Dev.to Backend Clone</h2>
+            <p>Nodejs Backend Restfull APIs that mimic Dev.to functionalities from auth to posting articles and managing comments.
+            </p>
+            <a class="btn" href="#">Github Repo</a>
+          </div>
+        </div>
+      </div>
+      <div id="contactSection" class="contactSection">
+        <h1>Contact Me</h1>
+        <p>Feel free to contact me by submitting you message below and I’ll get back to you as soon as I can :)</p>
+        <div class="errMessage"></div>
+        <form action="/newMessage" method="post" class="contactForm form">
+          <label for="nameInput">Name</label>
+          <div class="inputContainer">
+            <input type="text" name="name" id="nameInput" class="textInput" placeholder="Enter your name">
+            <p id="nameValidationErr"></p>
+          </div>
+          <label for="emailInput">Email</label>
+          <div class="inputContainer">
+            <input type="email" name="email" id="emailInput" class="textInput" placeholder="Enter your email">
+            <p id="emailValidationErr"></p>
+          </div>
+          <label for="messageInput">Message</label>
+          <div class="inputContainer">
+            <textarea name="message" id="messageInput" cols="30" rows="10" class="textInput" placeholder="Enter your message"></textarea>
+            <p id="messageValidationErr"></p>
+          </div>
+
+          <button type="submit" class="btn">Submit</button>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <div class="copyright">
+        <i class="fa-regular fa-copyright"></i>
+        <p>Copyright 2024. Made by Shema R Alain Serge</p>
+      </div>
+
+      <div class="socialLinks">
+        <a href=""><i class="fa-brands fa-github"></i></a>
+        <a href=""><i class="fa-brands fa-linkedin"></i></a>
+        <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+        <a href=""><i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </footer>
+  </body>
+  <script src="https://kit.fontawesome.com/3f2aa35973.js" crossorigin="anonymous"></script>
+  <script src="./js/main.js"></script>
+  <script src="./js/validation.js"></script>
+  <script src="./js/contactForm.js"></script>
+<>

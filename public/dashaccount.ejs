@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog</title>
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/dashboard.css" />
+  <link rel="stylesheet" href="./css/account.css" />
+</head>
+
+<body>
+  <div class="mobileHeader">
+    <div class="backBtn">
+      <i class="fa-solid fa-xmark"></i>
+      <p>close</p>
+    </div>
+    <nav class="mobileNavigation">
+      <ul>
+        <li>
+          <a class="nav-item" href="./index.html#aboutSection">About
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index.html#projectsSection">My Work
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./blog.html">Blog
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index.html#contactSection">Contact Me
+            <div></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mobile-screen-profile" class="profileContainer">
+      <div>
+        <img src="./images/<%=user.profileImg>" alt="" />
+        <p><%=user.name%></p>
+      </div>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="mobileProfileOptions">
+      <a href="./dashboard.html">Dashboard</a>
+      <a href="./blog.html">Log out</a>
+    </div>
+  </div>
+  <header>
+    <nav class="navigation">
+      <ul>
+        <li>
+          <a class="nav-item" href="./index.html#aboutSection">About
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index.html#projectsSection">My Work
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./blog.html">Blog
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index.html#contactSection">Contact Me
+            <div></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="profileOptions">
+      <a href="#">Dashboard</a>
+      <a href="#">Logout</a>
+    </div>
+    <div id="wide-screen-profile" class="profileContainer">
+      <div>
+        <img src="./images/<%=user.profileImg>" alt="" />
+        <p><%=user.name%></p>
+      </div>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+  </header>
+  <main>
+    <select class="mobileSectionContainer" name="dashpage" id="dashNavigation">
+      <option value="Posts">Posts (14)</option>
+      <option value="Messages">Messages (121)</option>
+      <option value="Users">Users (234)</option>
+      <option value="Notifications">Notifications (121)</option>
+      <option value="Account" selected>Account</option>
+    </select>
+    <div class="sectionContainer">
+      <a href="./dashboard.html">
+        <div class="section">
+          <p class="sectionName">Posts</p>
+          <p class="sectionCount">121</p>
+        </div>
+      </a>
+      <a href="./dashmessages.html">
+        <div class="section">
+          <p class="sectionName">Messages</p>
+          <p class="sectionCount">142</p>
+        </div>
+      </a>
+      <a href="./dashusers.html">
+        <div class="section">
+          <p class="sectionName">Users</p>
+          <p class="sectionCount">123</p>
+        </div>
+      </a>
+      <a href="./dashnotifications.html">
+        <div class="section">
+          <p class="sectionName">Notifications</p>
+          <p class="sectionCount">12</p>
+        </div>
+      </a>
+      <a href="./dashaccount.html">
+        <div class="section active">
+          <p class="sectionName">Account</p>
+        </div>
+      </a>
+    </div>
+    <div class="mainContent">
+      <div class="profileInfoContainer">
+        <p>Profile</p>
+        <div id="profileErrMessage" class="errMessage"></div>
+        <form action="" id="profileForm" class="form">
+          <label for="nameInput">Name:</label>
+          <div class="inputContainer">
+            <input type="text" name="name" id="nameInput" placeholder="Shema Serge" required/>
+            <p id="nameValidationErr"></p>
+          </div>
+          <label for="emailInput">Email:</label>
+          <div class="inputContainer">
+            <input type="email" name="email" id="emailInput" placeholder="shemaserge@gmail.com" required/>
+            <p id="emailValidationErr"></p>
+          </div>
+          <label for="User-Profile-PNG-Image">Profile Image:</label>
+          <div class="changeProfileImage">
+            <img src="./images/User-Profile-PNG-Image 1.png" alt="" />
+            <input type="file" name="image" id="image" />
+          </div>
+          <button class="btn" type="submit">Save Profile Information</button>
+        </form>
+        <hr class="separator">
+        <p>Password</p>
+        <div id="passwdErrMessage" class="errMessage"></div>
+        <form action="" id="passwdForm" class="form">
+          <label for="currentPasswdInput">Current Password:</label>
+          <div class="inputContainer">
+            <input type="password" name="currentPassword" id="currentPasswdInput" placeholder="Enter Password" />
+            <p id="currentPasswdValidationErr"></p>
+          </div>
+
+          <label for="newPasswdInput">New Password:</label>
+          <div class="inputContainer">
+            <input type="password" name="newPassword" id="newPasswdInput" placeholder="Enter Password" />
+            <p id="newPasswdValidationErr"></p>
+          </div>
+
+          <label for="confirmNewPasswdInput">Confirm New Password:</label>
+          <div class="inputContainer">
+            <input type="password" name="confirmNewPassword" id="confirmNewPasswdInput"
+              placeholder="Enter Password" />
+            <p id="confirmNewPasswdValidationErr"></p>
+          </div>
+
+          <button type="submit" class="btn">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</body>
+<script src="https://kit.fontawesome.com/3f2aa35973.js" crossorigin="anonymous"></script>
+<script src="./js/main.js"></script>
+<script src="./js/popups.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/validation.js"></script>
+<script src="./js/accountForm.js"></script>
+</html>

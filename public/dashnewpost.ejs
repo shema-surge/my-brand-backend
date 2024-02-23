@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog</title>
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/dashboard.css" />
+  <link rel="stylesheet" href="./css/editor.css" />
+</head>
+
+<body>
+  <div class="mobileHeader">
+    <div class="backBtn">
+      <i class="fa-solid fa-xmark"></i>
+      <p>close</p>
+    </div>
+    <nav class="mobileNavigation">
+      <ul>
+        <li>
+          <a class="nav-item" href="./index#aboutSection">About
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index#projectsSection">My Work
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./blog">Blog
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index#contactSection">Contact Me
+            <div></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mobile-screen-profile" class="profileContainer">
+      <div>
+        <img src="./images/<%=user.profileImg%>" alt="" />
+        <p><%=user.name%></p>
+      </div>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="mobileProfileOptions">
+      <a href="./dashboard">Dashboard</a>
+      <a href="./blog">Log out</a>
+    </div>
+  </div>
+  <header>
+    <nav class="navigation">
+      <ul>
+        <li>
+          <a class="nav-item" href="./index#aboutSection">About
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index#projectsSection">My Work
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./blog">Blog
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index#contactSection">Contact Me
+            <div></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="menu">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="profileOptions">
+      <a href="#">Dashboard</a>
+      <a href="#">Logout</a>
+    </div>
+    <div id="wide-screen-profile" class="profileContainer">
+      <div>
+        <img src="./images/<%=user.profileImg%>" alt="" />
+        <p><%=user.name%></p>
+      </div>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+  </header>
+  <main>
+    <select class="mobileSectionContainer" name="dashpage" id="dashNavigation">
+      <option value="Posts" selected>Posts (14)</option>
+      <option value="Messages">Messages (121)</option>
+      <option value="Users">Users (234)</option>
+      <option value="Notifications">Notifications (121)</option>
+      <option value="Account">Account</option>
+    </select>
+    <div class="sectionContainer">
+      <a href="./dashboard">
+        <div class="section active">
+          <p class="sectionName">Posts</p>
+          <p class="sectionCount">121</p>
+        </div>
+      </a>
+      <a href="./dashmessages">
+        <div class="section">
+          <p class="sectionName">Messages</p>
+          <p class="sectionCount">142</p>
+        </div>
+      </a>
+      <a href="./dashusers">
+        <div class="section">
+          <p class="sectionName">Users</p>
+          <p class="sectionCount">123</p>
+        </div>
+      </a>
+      <a href="./dashnotifications">
+        <div class="section">
+          <p class="sectionName">Notifications</p>
+          <p class="sectionCount">12</p>
+        </div>
+      </a>
+      <a href="./dashaccount">
+        <div class="section">
+          <p class="sectionName">Account</p>
+        </div>
+      </a>
+    </div>
+    <div class="mainContent">
+      <div class="editor">
+        <form action="/newPost" method="post" class="postForm">
+          <input type="text" name="title" id="" placeholder="New Post Title" required/>
+          <textarea name="content" id="mytextarea" cols="30" rows="10" placeholder="Write your post content here"></textarea>
+          <button class="btn" type="submit">Publish</button>
+        </form>
+      </div>
+    </div>
+  </main>
+</body>
+<script src="https://kit.fontawesome.com/3f2aa35973.js" crossorigin="anonymous"></script>
+
+
+<script src="https://cdn.tiny.cloud/1/ppb32616swnbw1qrrocbjcyp3cgw82wjezkmh72qocql2pcq/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+  tinymce.init({
+    selector: '#mytextarea',
+  });
+</script>
+
+
+<script src="./js/main.js"></script>
+<script src="./js/popups.js"></script>
+<script src="./js/navigation.js"></script>
+
+</html>

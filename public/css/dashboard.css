@@ -1,0 +1,76 @@
+body{
+    background-color: #141414;
+}
+
+main{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+}
+
+.sectionContainer{
+    grid-row: 1/4;
+}
+
+.controlsContainer{
+    width:80%;
+    grid-column:2/5;
+}
+
+.mainContent{
+    width:80%;
+    display:flex;
+    flex-direction: column;
+    gap:3rem;
+    margin:auto;
+    grid-column: 2/5;
+}
+
+
+/* commmon styles for ellipsis button */
+
+.moreOptionsBtn{
+    padding:5px;
+    height:fit-content;
+    font-size: 25px;
+    border-radius:5px;
+    color:var(--light)
+}
+
+.moreOptionsBtn:hover{
+    background-color: #333333;
+}
+
+/* common styes for popup options */
+
+.options{
+    position:absolute;
+    z-index:2;
+    display:none;
+    flex-direction: column;
+    padding:12px;
+    border-radius: 5px;
+    background-color: #181818;
+}
+
+.options a{
+    color:var(--light);
+    font-size: 13px;
+    font-weight: 600;
+    padding:12px;
+    border-radius: 5px;
+}
+
+.options a:hover{
+    background-color: #333333;
+}
+@media only screen and (max-width:700px){
+    .controlsContainer{
+        grid-column:1/5;
+    }
+
+    .mainContent{
+        width:80%;
+        grid-column: 1/5;
+    }
+}

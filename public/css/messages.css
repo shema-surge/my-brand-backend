@@ -1,0 +1,72 @@
+.emptyMessage{
+    color:white;
+    font-size: 13px;
+    margin:2rem auto;
+    color:var(--light)
+}
+
+.message{
+    position:relative;
+    padding:1rem 1rem;
+    border-radius: 5px;
+}
+
+.message:hover{
+    background-color: #252525;
+    cursor: pointer;
+}
+
+.messageTopContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.messageData>div{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color:var(--light);
+}
+
+.timeSent{
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.messageProfile{
+    display: flex;
+    align-items: center;
+    gap:10px;
+}
+
+.messageProfile>p{
+    font-size:15px;
+    font-weight: 600;
+}
+
+.senderEmail{
+    color:var(--light);
+    margin:1rem 0;
+    font-size: 15px;
+}
+
+.senderEmail span{
+    font-weight: 600;
+}
+
+.messageOptions{
+    top:55px;
+    right:15px;
+}
+
+.messageContent{
+    font-size: 15px;
+    color:var(--light)
+}
+
+
+
+@media only screen  and (max-width:700px){
+
+}

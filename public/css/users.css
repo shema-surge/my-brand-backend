@@ -1,0 +1,40 @@
+.users{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap:1rem;
+}
+
+.user{
+    position:relative;
+    display: flex;
+    justify-content: space-between;
+    padding:1rem 1rem;
+    border-radius: 5px;
+    background-color: var(--dark);
+}
+
+.userInfo div{
+    display: flex;
+    margin:10px 0;
+}
+
+.userInfo div p{
+    color:var(--light);
+    font-size:15px;
+}
+
+.userInfo div p:first-child{
+    margin:0 10px;
+    font-weight:600;
+}
+
+.userOptions{
+    top:55px;
+    right:15px;
+}
+
+@media (max-width:1020px){
+    .users{
+        grid-template-columns: 1fr;
+    }
+}
