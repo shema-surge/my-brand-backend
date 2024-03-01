@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog</title>
-    <link rel="stylesheet" href="./css/main.css" />
-    <link rel="stylesheet" href="./css/dashboard.css" />
-    <link rel="stylesheet" href="./css/messages.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+    <link rel="stylesheet" href="../css/messages.css" />
   </head>
   <body>
     <div class="mobileHeader">
@@ -17,25 +17,25 @@
       <nav class="mobileNavigation">
         <ul>
           <li>
-            <a class="nav-item" href="./index.html#aboutSection"
+            <a class="nav-item" href="/"
               >About
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index.html#projectsSection"
+            <a class="nav-item" href="/"
               >My Work
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./blog.html"
+            <a class="nav-item" href="/"
               >Blog
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index.html#contactSection"
+            <a class="nav-item" href="/"
               >Contact Me
               <div></div
             ></a>
@@ -44,7 +44,7 @@
       </nav>
       <div id="mobile-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg%>" alt="" />
+          <img src="../images/<%=user.profileImg%>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -58,25 +58,25 @@
       <nav class="navigation">
         <ul>
           <li>
-            <a class="nav-item" href="./index.html#aboutSection"
+            <a class="nav-item" href="/"
               >About
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index.html#projectsSection"
+            <a class="nav-item" href="/"
               >My Work
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./blog.html"
+            <a class="nav-item" href="/"
               >Blog
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index.html#contactSection"
+            <a class="nav-item" href="/"
               >Contact Me
               <div></div
             ></a>
@@ -94,7 +94,7 @@
       </div>
       <div id="wide-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg%>" alt="" />
+          <img src="../images/<%=user.profileImg%>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -109,31 +109,31 @@
         <option value="Account">Account</option>
       </select>
       <div class="sectionContainer">
-        <a href="./dashboard.html">
+        <a href="/dashboard">
           <div class="section">
             <p class="sectionName">Posts</p>
             <p class="sectionCount">121</p>
           </div>
         </a>
-        <a href="./dashmessages.html">
+        <a href="/messages">
           <div class="section active">
             <p class="sectionName">Messages</p>
             <p class="sectionCount">142</p>
           </div>
         </a>
-        <a href="./dashusers.html">
+        <a href="/users">
           <div class="section">
             <p class="sectionName">Users</p>
             <p class="sectionCount">123</p>
           </div>
         </a>
-        <a href="./dashnotifications.html">
+        <a href="/notifications">
           <div class="section">
             <p class="sectionName">Notifications</p>
             <p class="sectionCount">12</p>
           </div>
         </a>
-        <a href="./dashaccount.html">
+        <a href="/account">
           <div class="section">
             <p class="sectionName">Account</p>
           </div>
@@ -168,6 +168,7 @@
                   </div>
                   <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
                   <div class="messageOptions options">
+                    <a href="#">Reply</a>
                     <a href="#">Delete</a>
                   </div>
               </div>
@@ -187,8 +188,8 @@
     src="https://kit.fontawesome.com/3f2aa35973.js"
     crossorigin="anonymous"
   ></script>
-  <script src="./js/main.js"></script>
-  <script src="./js/htmx.min.js"></script>
-  <script src="./js/popups.js"></script>
-  <script src="./js/navigation.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/htmx.min.js"></script>
+  <script src="../js/popups.js"></script>
+  <script src="../js/navigation.js"></script>
 </html>

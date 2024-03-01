@@ -6,7 +6,6 @@ let currentActive=null
 
 moreOptionsBtn.forEach(btn=>{
     btn.addEventListener('click',(event)=>{
-        console.log("ellipsis clicked")
         let optionMenu=btn.nextElementSibling
         if(optionMenu.style.display==="flex"){
             currentActive=null

@@ -5,9 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blog</title>
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/dashboard.css" />
-  <link rel="stylesheet" href="./css/editor.css" />
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/editor.css" />
 </head>
 
 <body>
@@ -42,7 +42,7 @@
     </nav>
     <div id="mobile-screen-profile" class="profileContainer">
       <div>
-        <img src="./images/<%=user.profileImg%>" alt="" />
+        <img src="../images/<%=user.profileImg%>" alt="" />
         <p><%=user.name%></p>
       </div>
       <i class="fa-solid fa-chevron-down"></i>
@@ -88,7 +88,7 @@
     </div>
     <div id="wide-screen-profile" class="profileContainer">
       <div>
-        <img src="./images/<%=user.profileImg%>" alt="" />
+        <img src="../images/<%=user.profileImg%>" alt="" />
         <p><%=user.name%></p>
       </div>
       <i class="fa-solid fa-chevron-down"></i>
@@ -103,31 +103,31 @@
       <option value="Account">Account</option>
     </select>
     <div class="sectionContainer">
-      <a href="./dashboard">
+      <a href="/dashboard">
         <div class="section active">
           <p class="sectionName">Posts</p>
           <p class="sectionCount">121</p>
         </div>
       </a>
-      <a href="./dashmessages">
+      <a href="/messages">
         <div class="section">
           <p class="sectionName">Messages</p>
           <p class="sectionCount">142</p>
         </div>
       </a>
-      <a href="./dashusers">
+      <a href="/users">
         <div class="section">
           <p class="sectionName">Users</p>
           <p class="sectionCount">123</p>
         </div>
       </a>
-      <a href="./dashnotifications">
+      <a href="/notifications">
         <div class="section">
           <p class="sectionName">Notifications</p>
           <p class="sectionCount">12</p>
         </div>
       </a>
-      <a href="./dashaccount">
+      <a href="/account">
         <div class="section">
           <p class="sectionName">Account</p>
         </div>
@@ -135,10 +135,10 @@
     </div>
     <div class="mainContent">
       <div class="editor">
-        <form action="/newPost" method="post" class="postForm">
-          <input type="text" name="title" id="" placeholder="New Post Title" required/>
+        <form action="/dashboard/editPost?pid=<%=post._id%>" method="post" class="postForm">
+          <input type="text" name="title" id="titleInput" placeholder="New Post Title" required/>
           <textarea name="content" id="mytextarea" cols="30" rows="10" placeholder="Write your post content here"></textarea>
-          <button class="btn" type="submit">Publish</button>
+          <button class="btn" type="submit">Save Changes</button>
         </form>
       </div>
     </div>
@@ -156,8 +156,22 @@
 </script>
 
 
-<script src="./js/main.js"></script>
-<script src="./js/popups.js"></script>
-<script src="./js/navigation.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/popups.js"></script>
+<script src="../js/navigation.js"></script>
+<script>
+
+const postForm=document.querySelector(".postForm")
+const titleInput=document.querySelector("#titleInput")
+const mytextarea=document.querySelector("#mytextarea")
+
+window.addEventListener("DOMContentLoaded",()=>{
+  console.log("Hello")
+  titleInput.value=`<%=post.title%>`;
+  mytextarea.value=`<%-post.content%>`;
+})
+
+
+</script>
 
 </html>

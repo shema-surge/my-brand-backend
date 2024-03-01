@@ -19,22 +19,22 @@
     <nav class="mobileNavigation">
       <ul>
         <li>
-          <a class="nav-item" href="./index.html#aboutSection">About
+          <a class="nav-item" href="/">About
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index.html#projectsSection">My Work
+          <a class="nav-item" href="/">My Work
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./blog.html">Blog
+          <a class="nav-item" href="/blog">Blog
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index.html#contactSection">Contact Me
+          <a class="nav-item" href="/">Contact Me
             <div></div>
           </a>
         </li>
@@ -42,36 +42,36 @@
     </nav>
     <div id="mobile-screen-profile" class="profileContainer">
       <div>
-        <img src="./images/<%=user.profileImg>" alt="" />
+        <img src="./images/<%=user.profileImg%>" alt="" />
         <p><%=user.name%></p>
       </div>
       <i class="fa-solid fa-chevron-down"></i>
     </div>
     <div class="mobileProfileOptions">
-      <a href="./dashboard.html">Dashboard</a>
-      <a href="./blog.html">Log out</a>
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/blog">Log out</a>
     </div>
   </div>
   <header>
     <nav class="navigation">
       <ul>
         <li>
-          <a class="nav-item" href="./index.html#aboutSection">About
+          <a class="nav-item" href="/">About
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index.html#projectsSection">My Work
+          <a class="nav-item" href="/">My Work
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./blog.html">Blog
+          <a class="nav-item" href="/blog">Blog
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index.html#contactSection">Contact Me
+          <a class="nav-item" href="/">Contact Me
             <div></div>
           </a>
         </li>
@@ -83,12 +83,12 @@
       <div></div>
     </div>
     <div class="profileOptions">
-      <a href="#">Dashboard</a>
+      <a href="/dashboard">Dashboard</a>
       <a href="#">Logout</a>
     </div>
     <div id="wide-screen-profile" class="profileContainer">
       <div>
-        <img src="./images/<%=user.profileImg>" alt="" />
+        <img src="./images/<%=user.profileImg%>" alt="" />
         <p><%=user.name%></p>
       </div>
       <i class="fa-solid fa-chevron-down"></i>
@@ -103,31 +103,31 @@
       <option value="Account" selected>Account</option>
     </select>
     <div class="sectionContainer">
-      <a href="./dashboard.html">
+      <a href="/dashboard">
         <div class="section">
           <p class="sectionName">Posts</p>
           <p class="sectionCount">121</p>
         </div>
       </a>
-      <a href="./dashmessages.html">
+      <a href="./messages">
         <div class="section">
           <p class="sectionName">Messages</p>
           <p class="sectionCount">142</p>
         </div>
       </a>
-      <a href="./dashusers.html">
+      <a href="/users">
         <div class="section">
           <p class="sectionName">Users</p>
           <p class="sectionCount">123</p>
         </div>
       </a>
-      <a href="./dashnotifications.html">
+      <a href="/notifications">
         <div class="section">
           <p class="sectionName">Notifications</p>
           <p class="sectionCount">12</p>
         </div>
       </a>
-      <a href="./dashaccount.html">
+      <a href="/account">
         <div class="section active">
           <p class="sectionName">Account</p>
         </div>
@@ -150,7 +150,7 @@
           </div>
           <label for="User-Profile-PNG-Image">Profile Image:</label>
           <div class="changeProfileImage">
-            <img src="./images/User-Profile-PNG-Image 1.png" alt="" />
+            <img src="./images/<%= user.profileImg%>" alt="" />
             <input type="file" name="image" id="image" />
           </div>
           <button class="btn" type="submit">Save Profile Information</button>
@@ -190,4 +190,12 @@
 <script src="./js/navigation.js"></script>
 <script src="./js/validation.js"></script>
 <script src="./js/accountForm.js"></script>
+<script>
+  
+  window.addEventListener("DOMContentLoaded",()=>{
+    nameInput.value=`<%= user.name%>`
+    emailInput.value=`<%= user.email%>`
+  })
+
+</script>
 </html>

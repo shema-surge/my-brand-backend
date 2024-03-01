@@ -14,9 +14,8 @@ const authenticateUser=async(req,res,next)=>{
         next()
     }catch(err){
         req.loggedIn=false
-        console.log(err)
-        next()
+        next(err)
     }
 }
 
-module.exports=authenticateUser
+module.exports={authenticateUser}

@@ -44,7 +44,7 @@
 
       <div id="mobile-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg>" alt="" />
+          <img src="./images/<%=user.profileImg%>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -94,7 +94,7 @@
       </div>
       <div id="wide-screen-profile" class="profileContainer">
         <div hx-get="/userProfile">
-          <img src="./images/<%=user.profileImg>" alt="" />
+          <img src="./images/<%=user.profileImg%>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -106,24 +106,23 @@
         <p class="postDate">Published on: <%= new Date(post.createdAt).toLocaleString()%></p>
         <%- post.content%>
         <div class="stats">
-          <div>
+          <div id="postLikesContainer">
             <i class="fa-regular fa-heart"></i>
-            <p><%= post.likes%> likes</p>
+            <p id="postLikes"><%= post.likes%> likes</p>
           </div>
-          <div>
+          <div id="postCommentsContainer">
             <i class="fa-regular fa-comment"></i>
-            <p><%= post.comments%> comments</p>
+            <p id="postComments"><%= post.comments%> comments</p>
           </div>
         </div>
       </div>
       <div class="commentSection">
         <div class="commentContainer">
-          <p>Comments (6)</p>
-          <form class="commentForm" action="/newComment?pid=<%= post._id%>" method="post">
+          <p>Comments (<%= post.comments%>)</p>
+          <form class="commentForm" method="post">
             <textarea
               name="content"
-              id=""
-              cols="30"
+              id="contentTextArea"
               rows="10"
               placeholder="Add your comment"
             ></textarea>
@@ -136,19 +135,19 @@
           <% } else{ comments.forEach(comment=>{%>
           <div class="comment">
             <div class="commentInfo">
-              <div class="profile" hx-get="/userProfile" hx-trigger="load" hx-swap="innerHTML">
-                <img src="./images/User-Profile-PNG-Image 1.png" alt="" />
-                <p>jackTheCoder</p>
+              <div class="profile">
+                <img src="./images/<%= comment.author.profileImg%>" alt="" />
+                <p><%= comment.author.name%></p>
               </div>
-              <p><%= new Date(comment.createdAt).toLocaleString() %></p>
+              <p><%= new Date(comment._doc.createdAt).toLocaleString()%></p>
             </div>
             <p>
-              <%= comment.content%>
+              <%= comment._doc.content%>
             </p>
             <div class="stats">
-              <div>
+              <div data-comment-id="<%= comment._doc._id%>" class="commentLikesContainer">
                 <i class="fa-regular fa-heart"></i>
-                <p><%= comment.likes%> likes</p>
+                <p><%= comment._doc.likes%> likes</p>
               </div>
               <div>
                 <i class="fa-regular fa-message"></i>
@@ -167,4 +166,82 @@
   ></script>
   <script src="./js/main.js"></script>
   <script src="./js/htmx.min.js"></script>
+  <script>
+    const postLikes=document.getElementById("postLikesContainer")
+    const commentLikes=document.querySelectorAll(".commentLikesContainer")
+    const commentSection=document.querySelector(".comments")
+    const commentForm=document.querySelector(".commentForm")
+    const contentTextArea=document.getElementById("contentTextArea")
+
+    commentLikes.forEach(commentLike=>{
+      commentLike.addEventListener("click",async()=>{
+        const {commentId}=commentLike.dataset
+        if(!commentId) return
+        const response=await fetch(`/dashboard/likeComment?cid=${commentId}`,{method:"POST"})
+        const data=await response.json()
+        commentLike.children[1].textContent=`${data.likes} likes`
+      })
+    })
+
+    postLikes.addEventListener("click",async()=>{
+      const urlParams=new URLSearchParams(window.location.search)
+      const response=await fetch(`/dashboard/likePost?pid=${urlParams.get("pid")}`)
+      const data=await response.json()
+      postLikes.children[1].textContent=`${data.likes} likes`
+    })
+
+
+
+    commentForm.addEventListener("submit",async(e)=>{
+      e.preventDefault()
+      console.log("Hello")
+      const response=await fetch("/dashboard/newComment?pid=<%= post._id%>",{
+        method:"POST",
+        body:JSON.stringify({
+          content:contentTextArea.value
+        }),
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      })
+      const data=await response.json()
+
+      document.getElementById("postComments").textContent=`${data.comments.length} comments`
+      if(data.comments.length===0){
+        commentSection.innerHTML='<p class="errMessage">No Comments yet!</p>'
+        return
+      }
+      updateComments(data.comments)
+    })
+
+    const updateComments=(comments)=>{
+      commentSection.innerHTML=''
+      comments.forEach(comment=>{
+        commentSection.innerHTML+=`
+          <div class="comment">
+            <div class="commentInfo">
+              <div class="profile">
+                <img src="./images/${comment.author.profileImg}" alt="" />
+                <p>${comment.author.name}</p>
+              </div>
+              <p>${new Date(comment._doc.createdAt).toLocaleString()}</p>
+            </div>
+            <p>
+              ${comment._doc.content}
+            </p>
+            <div class="stats">
+              <div data-comment-id="${comment._doc._id}" class="commentLikesContainer">
+                <i class="fa-regular fa-heart"></i>
+                <p>${comment._doc.likes} likes</p>
+              </div>
+              <div>
+                <i class="fa-regular fa-message"></i>
+                <p>Reply</p>
+              </div>
+            </div>
+          </div>`
+      })
+    }
+
+  </script>
 </html>

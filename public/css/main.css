@@ -411,6 +411,10 @@ header{
     font-weight: 600;
 }
 
+.stats .postLikesContainer{
+    cursor: pointer;
+}
+
 /* sections menu links */
 
 .sectionContainer{

@@ -64,6 +64,46 @@ main{
 .options a:hover{
     background-color: #333333;
 }
+
+.confirmPopup{
+    display: none;
+    position:absolute;
+    top:35%;
+    right:35%;
+    width:25%;
+    text-align: center;
+    background-color: #333333;
+    padding:2rem;
+    border-radius: 5px;
+    z-index:3;
+}
+
+.confirmPopup p{
+    color:var(--light);
+    font-size: 13px;
+    margin-bottom: 1rem;
+}
+
+.confirmPopup div{
+    display: flex;
+    justify-content: space-around;
+}
+
+.confirmPopup div a{
+    color:var(--light);
+    font-size: 13px;
+    padding:8px;
+    border-radius: 5px;
+}
+
+.cancelBtn{
+    background-color:var(--dark)
+}
+
+.confirmBtn{
+    background-color:rgb(154, 0, 0)
+}
+
 @media only screen and (max-width:700px){
     .controlsContainer{
         grid-column:1/5;
@@ -72,5 +112,10 @@ main{
     .mainContent{
         width:80%;
         grid-column: 1/5;
+    }
+
+    .confirmPopup{
+        width: 30%;
+        right:25%;
     }
 }

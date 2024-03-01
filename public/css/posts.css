@@ -21,9 +21,15 @@
 }
 
 .postData .postTitle{
+    display: block;
     font-size:16px;
     font-weight: 600;
     margin-bottom: 1rem;
+    color:var(--light)
+}
+
+.postData .postTitle:hover{
+    text-decoration: underline;
 }
 
 .postData{

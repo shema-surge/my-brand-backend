@@ -44,7 +44,7 @@
       </nav>
       <div id="mobile-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg>" alt="" />
+          <img src="./images/<%=user.profileImg%>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -94,7 +94,7 @@
       </div>
       <div id="wide-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg>" alt="" />
+          <img src="./images/<%=user.profileImg%>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -109,31 +109,31 @@
         <option value="Account">Account</option>
       </select>
       <div class="sectionContainer">
-        <a href="./dashboard.html">
+        <a href="/dashboard">
           <div class="section">
             <p class="sectionName">Posts</p>
             <p class="sectionCount">121</p>
           </div>
         </a>
-        <a href="./dashmessages.html">
+        <a href="/messages">
           <div class="section">
             <p class="sectionName">Messages</p>
             <p class="sectionCount">142</p>
           </div>
         </a>
-        <a href="./dashusers.html">
+        <a href="/users">
           <div class="section active">
             <p class="sectionName">Users</p>
             <p class="sectionCount">123</p>
           </div>
         </a>
-        <a href="./dashnotifications.html">
+        <a href="/notifications">
           <div class="section">
             <p class="sectionName">Notifications</p>
             <p class="sectionCount">12</p>
           </div>
         </a>
-        <a href="./dashaccount.html">
+        <a href="/account">
           <div class="section">
             <p class="sectionName">Account</p>
           </div>
@@ -152,13 +152,15 @@
       </div>
       <div class="mainContent">
         <div class="users">
+          <% users.forEach(user=>{%>
             <div class="user">
                 <div class="userData">
                     <img src="./images/User-Profile-PNG-Image 2.png" alt="">
                     <div class="userInfo">
-                        <div class="nameContainer"><p>Name:</p><p>Shema Serge</p></div>
-                        <div class="userEmail"><p>From:</p><p>shemaserge@gmail.com</p></div>
-                        <div class="userJoined"><p>Joined:</p><p>Jan 22 2023: 4:40pm</p></div>
+                        <div class="nameContainer"><p>Name:</p><p><%= user.name%></p></div>
+                        <div class="userEmail"><p>From:</p><p><%= user.email%></p></div>
+                        <div class="userRole"><p>Role:</p><p><%= user.roles%></p></div>
+                        <div class="userJoined"><p>Joined:</p><p><%= new Date(user.createdAt).toLocaleString()%></p></div>
                     </div>
                 </div>
                 <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
@@ -166,20 +168,7 @@
                   <a href="#">Delete</a>
                 </div>
             </div>
-            <div class="user">
-                <div class="userData">
-                    <img src="./images/User-Profile-PNG-Image 2.png" alt="">
-                    <div class="userInfo">
-                        <div class="nameContainer"><p>Name:</p><p>Shema Serge</p></div>
-                        <div class="userEmail"><p>From:</p><p>shemaserge@gmail.com</p></div>
-                        <div class="userJoined"><p>Joined:</p><p>Jan 22 2023: 4:40pm</p></div>
-                    </div>
-                </div>
-                <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
-                <div class="userOptions options">
-                  <a href="#">Delete</a>
-                </div>
-            </div>            
+          <% }) %>     
         </div>
       </div>
     </main>

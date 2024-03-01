@@ -17,25 +17,25 @@
       <nav class="mobileNavigation">
         <ul>
           <li>
-            <a class="nav-item" href="./index#aboutSection"
+            <a class="nav-item" href="/"
               >About
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index#projectsSection"
+            <a class="nav-item" href="/"
               >My Work
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./blog"
+            <a class="nav-item" href="/blog"
               >Blog
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index#contactSection"
+            <a class="nav-item" href="/"
               >Contact Me
               <div></div
             ></a>
@@ -58,25 +58,25 @@
       <nav class="navigation">
         <ul>
           <li>
-            <a class="nav-item" href="./index#aboutSection"
+            <a class="nav-item" href="/"
               >About
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index#projectsSection"
+            <a class="nav-item" href="/"
               >My Work
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./blog"
+            <a class="nav-item" href="/blog"
               >Blog
               <div></div
             ></a>
           </li>
           <li>
-            <a class="nav-item" href="./index#contactSection"
+            <a class="nav-item" href="/"
               >Contact Me
               <div></div
             ></a>
@@ -109,31 +109,31 @@
         <option value="Account">Account</option>
       </select>
       <div class="sectionContainer">
-        <a href="./dashboard">
+        <a href="/dashboard">
           <div class="section active">
             <p class="sectionName">Posts</p>
             <p class="sectionCount">121</p>
           </div>
         </a>
-        <a href="./dashmessages">
+        <a href="/messages">
           <div class="section">
             <p class="sectionName">Messages</p>
             <p class="sectionCount">142</p>
           </div>
         </a>
-        <a href="./dashusers">
+        <a href="/users">
           <div class="section">
             <p class="sectionName">Users</p>
             <p class="sectionCount">123</p>
           </div>
         </a>
-        <a href="./dashnotifications">
+        <a href="/notifications">
           <div class="section">
             <p class="sectionName">Notifications</p>
             <p class="sectionCount">12</p>
           </div>
         </a>
-        <a href="./dashaccount">
+        <a href="/account">
           <div class="section">
             <p class="sectionName">Account</p>
           </div>
@@ -157,7 +157,7 @@
           <% } else{ posts.forEach(post=>{%>
             <div class="post">
               <div class="postData">
-                <p class="postTitle"><%= post.title%></p>
+                <a class="postTitle" href="/post?pid=<%= post._id%>"><%= post.title%></a>
                 <p class="postDate">Published on: <%= new Date(post.createdAt).toLocaleString()%></p>
               </div>
               <div class="postSideContainer">
@@ -177,16 +177,23 @@
                 </div>
                 <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
                 <div class="postOptions options">
-                  <a href="">Edit</a>
-                  <a href="#">Delete</a>
+                  <a class="postEdit" href="/dashboard/editPost?pid=<%=post._id%>">Edit</a>
+                  <a data-post-id="<%= post._id%>" class="postDelete" href="#">Delete</a>
                 </div>
               </div>
             </div>
           <% })}%>
         </div>
-        <a href="./dashnewpost" class="newPost btn">New Post</a>
+        <a href="/dashboard/newpost" class="newPost btn">New Post</a>
       </div>
     </main>
+    <div class="confirmPopup">
+      <p>Are you sure you want to delete this post?</p>
+      <div class="confirm">
+        <a class="cancelBtn" href="#">Cancel</a>
+        <a class="confirmBtn" href="#">Confirm</a>
+      </div>
+    </div>
   </body>
   <script
     src="https://kit.fontawesome.com/3f2aa35973.js"
@@ -196,4 +203,66 @@
   <script src="./js/main.js"></script>
   <script src="./js/popups.js"></script>
   <script src="./js/navigation.js"></script>
-<>
+  <script>
+    const postsContainer=document.querySelector(".posts")
+    const postDeleteBtns=document.querySelectorAll(".postDelete")
+    const confirmPopup=document.querySelector(".confirmPopup")
+    const confirmBtn=document.querySelector(".confirmBtn")
+    const cancelBtn=document.querySelector(".cancelBtn")
+
+    postDeleteBtns.forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        if(confirmPopup.style.display==="" || confirmPopup.style.display==="none") confirmPopup.style.display="block"
+        confirmBtn.setAttribute("data-post-id",btn.dataset.postId)
+      })
+    })
+
+    confirmBtn.addEventListener("click",async()=>{
+      const {postId}=confirmBtn.dataset
+      const response=await fetch(`/dashboard/deletePost?pid=${postId}`,{method:"POST"})
+      const data=await response.json()
+      console.log(data)
+      if(data.posts) updatePosts(data.posts)
+      confirmPopup.style.display="none"
+    })
+
+    cancelBtn.addEventListener("click",async()=>{
+      confirmPopup.style.display="none"
+    })
+
+    const updatePosts=(postsData)=>{
+      postsContainer.innerHTML=""
+      postsData.forEach(post=>{
+        postsContainer.innerHTML+=`
+        <div class="post">
+              <div class="postData">
+                <a class="postTitle" href="/post?pid=${post._id}">${post.title}</a>
+                <p class="postDate">Published on: ${new Date(post.createdAt).toLocaleString()}</p>
+              </div>
+              <div class="postSideContainer">
+                <div class="interactions">
+                  <div class="postViews">
+                    <i class="fa-regular fa-eye"></i>
+                    <p>${post.views}</p>
+                  </div>
+                  <div class="postLikes">
+                    <i class="fa-regular fa-heart"></i>
+                    <p><${post.likes}</p>
+                  </div>
+                  <div class="postComments">
+                    <i class="fa-regular fa-comment"></i>
+                    <p>${post.comments}</p>
+                  </div>
+                </div>
+                <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
+                <div class="postOptions options">
+                  <a class="postEdit" href="/dashboard/editPost?pid=${post._id}">Edit</a>
+                  <a data-post-id="${post._id}" class="postDelete" href="#">Delete</a>
+                </div>
+              </div>
+            </div>
+        `
+      })
+    }
+
+  </script>
