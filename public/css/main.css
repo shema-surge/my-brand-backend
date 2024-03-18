@@ -35,6 +35,7 @@ header{
     height: 5rem;
     padding:0 5rem;
     background-color: var(--dark);
+    z-index:5
     /*position: relative; /* for the profileOptions div to be position:absolute relative to header */
 }
 
@@ -407,8 +408,8 @@ header{
     display: flex;
     align-items: center;
     gap:10px;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .stats .postLikesContainer{
@@ -532,3 +533,43 @@ footer{
     }
 
 }
+
+/* commmon styles for ellipsis button */
+
+.moreOptionsBtn{
+    padding:5px;
+    height:fit-content;
+    font-size: 25px;
+    border-radius:5px;
+    color:var(--light)
+}
+
+.moreOptionsBtn:hover{
+    background-color: #333333;
+}
+
+/* common styes for popup options */
+
+.options{
+    position:absolute;
+    z-index:2;
+    display:none;
+    flex-direction: column;
+    padding:12px;
+    border-radius: 5px;
+    background-color: #181818;
+}
+
+.options a{
+    color:var(--light);
+    font-size: 13px;
+    font-weight: 600;
+    padding:12px;
+    border-radius: 5px;
+}
+
+.options a:hover{
+    background-color: #333333;
+}
+
+/**/

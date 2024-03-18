@@ -1,4 +1,4 @@
-const {Schema,model}=require('mongoose')
+const {Schema,model, Types}=require('mongoose')
 
 const messageSchema=new Schema({
     name:{
@@ -13,7 +13,12 @@ const messageSchema=new Schema({
     message:{
         type:String,
         required:true
+    },
+    readBy:[Types.ObjectId],
+    sent:{
+        type:Date,
+        default:Date.now()
     }
-},{timestamps:true})
+})
 
 module.exports=model('messages',messageSchema)

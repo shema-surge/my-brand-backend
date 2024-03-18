@@ -2,11 +2,13 @@ const users=require("../models/users")
 const posts=require("../models/posts")
 const comments=require("../models/comments")
 const likes=require("../models/likes")
+const { checkViews } = require("./views")
 
 const renderNewPost= async(req, res) => {
     try{
-      res.render('dashnewpost',{user:req.user})
+      res.render('newpost',{user:req.user})
     }catch(err){
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err)
     }
 }
@@ -14,9 +16,11 @@ const renderNewPost= async(req, res) => {
 const renderEditPost=async(req,res)=>{
   try{
     const {pid}=req.query
+    if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
     const post=await posts.findById(pid)
-    res.render('dasheditpost',{user:req.user,post})
+    res.render('editpost',{user:req.user,post})
   }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
     console.log(err)
   }
 }
@@ -24,12 +28,11 @@ const renderEditPost=async(req,res)=>{
 const renderPost=async(req,res)=>{
     try{
       let commentAuthors=[]
-      if(!req.query.pid){
-        res.sendStatus(404)
-        throw new error("No Id parameter in query string")
-      }
+      const {pid}=req.query
+      if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
       const post=await posts.findById(req.query.pid)
-      if(!post) res.sendStatus(404)
+      if(!post) res.status(404).json({status:"failed",message:"Post Not Found"})
+      if(req.user) checkViews(post._id,req.user._id)
       let allComments=await comments.find({parent:post._id})
       const promiseArray=allComments.map(async(comment)=>{
         const author=await users.findById(comment.author)
@@ -38,34 +41,59 @@ const renderPost=async(req,res)=>{
       const modifiedComments=await Promise.all(promiseArray)
       res.render('post',{user:req.user,post,comments:modifiedComments})
     }catch(err){
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err)
     }
 }
 
-const renderDashboardPosts=async(req, res) => {
+const renderPosts=async(req, res) => {
     try {
-      if(!req.loggedIn) res.redirect("/login")
-      const allPosts = await posts.find();
-      res.render('dashboard',{user:req.user,posts:allPosts})
+      const allPosts = await posts.find({author:req.user._id});
+      res.render('posts',{user:req.user,posts:allPosts})
     } catch (err) {
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err);
     }
 }
 
+const renderBlogPosts=async(req, res) => {
+  try {
+    const allPosts = await posts.find();
+    res.render('blog',{user:req.user?req.user:null,posts:allPosts})
+  } catch (err) {
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
+    console.log(err);
+  }
+}
+
+const getPosts=async(req,res)=>{
+  try{
+    const allPosts=await posts.find();
+    res.status(200).json({status:"successful",posts:allPosts})
+  }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
+    console.log(err)
+  }
+}
+
 const likePost=async(req,res)=>{
     try{
-      let like=await likes.findOne({recipient:req.query.pid,user:req.user.id})
-      const post=await posts.findById(req.query.pid)
+      const {pid}=req.query
+      if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
+
+      let like=await likes.findOne({recipient:pid,user:req.user.id})
+      const post=await posts.findById(pid)
       if(!like){
-        await likes.create({recipient:req.query.pid,user:req.user._id})
+        await likes.create({recipient:pid,user:req.user._id})
         post.likes+=1
       }else{
-        await likes.deleteOne({recipient:req.query.pid,user:req.user._id})
+        await likes.deleteOne({recipient:pid,user:req.user._id})
         if(post.likes) post.likes-=1
       }
       await post.save()
-      res.json({likes:post.likes})
+      res.json({status:"successful",likes:post.likes})
     }catch(err){
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err)
     }
 }
@@ -73,44 +101,53 @@ const likePost=async(req,res)=>{
 const createNewPost=async(req,res)=>{
     try{
      const {title,content}=req.body
-     if(!title || !content) throw new Error("Missing data fields")
+     if(!title) return res.status(400).json({status:"failed",message:"Missing Post Title"})
+     if(!content) return res.status(400).json({status:"failed",message:"Missing Post Content"})
      await posts.create({title,content,author:req.user.id})
-     res.redirect("/dashboard")
+     res.status(200).redirect("/posts")
     }catch(err){
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err)
     }
+}
+
+const getPost=async(req,res)=>{
+  try{
+    const {pid}=req.query
+    if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
+    const post=await posts.findById(pid)
+    res.json({status:"successful",post})
+  }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
+    console.log(err)
+  }
 }
 
 const editPost=async(req,res)=>{
   try{
     const {pid}=req.query
     const {title,content}=req.body
-    if(!title || !content) throw new Error("Missing data fields")
+
+    if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
+    if(!title) return res.status(400).json({status:"failed",message:"Missing Post Title"})
+    if(!content) return res.status(400).json({status:"failed",message:"Missing Post Content"})
+
     await posts.findByIdAndUpdate(pid,{title,content})
-    res.redirect("/dashboard")
+    res.redirect("/posts")
   }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
     console.log(err)
   }
-}
-
-const renderBlogPosts=async(req, res) => {
-    try {
-      const allPosts = await posts.find();
-      res.render('blog',{user:req.user?req.user:null,posts:allPosts})
-    } catch (err) {
-      console.log(err);
-    }
 }
 
 const deletePost=async(req,res)=>{
   try{
-    await posts.findByIdAndDelete(req.query.pid)
-    const postsData=await posts.find()
-    res.json({status:"successfull",posts:postsData})
+    const deletedPost=await posts.findByIdAndDelete(req.query.pid)
+    res.json({status:"successfull",post:deletedPost})
   }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
     console.log(err)
-    res.json({status:"failed"})
   }
 }
 
-module.exports={renderPost,renderNewPost,renderDashboardPosts,likePost,createNewPost,renderBlogPosts,deletePost,renderEditPost,editPost}
+module.exports={renderPost,renderNewPost,renderPosts,getPosts,likePost,createNewPost,renderBlogPosts,deletePost,renderEditPost,editPost,getPost}

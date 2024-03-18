@@ -1,234 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post</title>
-    <link rel="stylesheet" href="./css/main.css" />
-    <link rel="stylesheet" href="./css/post.css" />
-  </head>
-  <body>
-    <div class="mobileHeader">
-      <div class="backBtn">
-        <i class="fa-solid fa-xmark"></i>
-        <p>close</p>
-      </div>
-      <nav class="mobileNavigation">
-        <ul>
-          <li>
-            <a class="nav-item" href="./index.html#aboutSection"
-              >About
-              <div></div
-            ></a>
-          </li>
-          <li>
-            <a class="nav-item" href="./index.html#projectsSection"
-              >My Work
-              <div></div
-            ></a>
-          </li>
-          <li>
-            <a class="nav-item" href="./blog.html"
-              >Blog
-              <div></div
-            ></a>
-          </li>
-          <li>
-            <a class="nav-item" href="./index.html#contactSection"
-              >Contact Me
-              <div></div
-            ></a>
-          </li>
-        </ul>
-      </nav>
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post</title>
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/post.css" />
+</head>
+
+<body>
+  <div class="mobileHeader">
+    <div class="backBtn">
+      <i class="fa-solid fa-xmark"></i>
+      <p>close</p>
+    </div>
+    <nav class="mobileNavigation">
+      <ul>
+        <li>
+          <a class="nav-item" href="./index.html#aboutSection">About
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index.html#projectsSection">My Work
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./blog.html">Blog
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="./index.html#contactSection">Contact Me
+            <div></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <% if(user){ %>
       <div id="mobile-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg%>" alt="" />
-          <p><%=user.name%></p>
+          <img src="./images/<%= user.profileImg%>" alt="" />
+          <p>
+            <%= user.name%>
+          </p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
       </div>
       <div class="mobileProfileOptions">
-        <a href="./dashboard.html">Dashboard</a>
-        <a href="./blog.html">Log out</a>
+        <a href="/posts">Dashboard</a>
+        <a href="/logout">Logout</a>
       </div>
+      <%} else {%>
+        <a id="mobileLoginBtn" class="btn" href="./login">Login</a>
+        <% } %>
+  </div>
+  <header>
+    <nav class="navigation">
+      <ul>
+        <li>
+          <a class="nav-item" href="/">About
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="/">My Work
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="/blog">Blog
+            <div></div>
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" href="/">Contact Me
+            <div></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="menu">
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-    <header>
-      <nav class="navigation">
-        <ul>
-          <li>
-            <a class="nav-item" href="./index.html#aboutSection"
-              >About
-              <div></div
-            ></a>
-          </li>
-          <li>
-            <a class="nav-item" href="./index.html#projectsSection"
-              >My Work
-              <div></div
-            ></a>
-          </li>
-          <li>
-            <a class="nav-item" href="./blog.html"
-              >Blog
-              <div></div
-            ></a>
-          </li>
-          <li>
-            <a class="nav-item" href="./index.html#contactSection"
-              >Contact Me
-              <div></div
-            ></a>
-          </li>
-        </ul>
-      </nav>
-      <div class="menu">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
+    <% if(user){%>
       <div class="profileOptions">
-        <a href="./dashboard.html">Dashboard</a>
-        <a href="./blog.html">Logout</a>
+        <a href="/posts">Dashboard</a>
+        <a href="/logout">Logout</a>
       </div>
       <div id="wide-screen-profile" class="profileContainer">
-        <div hx-get="/userProfile">
-          <img src="./images/<%=user.profileImg%>" alt="" />
-          <p><%=user.name%></p>
+        <div>
+          <img src="./images/<%=user.profileImg %>" alt="" />
+          <p>
+            <%=user.name%>
+          </p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
       </div>
-    </header>
-    <main>
-      <div class="postContainer">
-        <h1><%= post.title%></h1>
-        <p class="postDate">Published on: <%= new Date(post.createdAt).toLocaleString()%></p>
-        <%- post.content%>
+      <%} else {%>
+        <a id="loginBtn" class="btn" href="./login">Login</a>
+        <% } %>
+  </header>
+  <main>
+    <div class="postContainer">
+      <h1>
+        <%= post.title%>
+      </h1>
+      <p class="postDate">Published on: <%= new Date(post.createdAt).toLocaleString()%>
+      </p>
+      <%- post.content%>
         <div class="stats">
           <div id="postLikesContainer">
             <i class="fa-regular fa-heart"></i>
-            <p id="postLikes"><%= post.likes%> likes</p>
+            <p id="postLikes">
+              <%= post.likes%> likes
+            </p>
           </div>
           <div id="postCommentsContainer">
             <i class="fa-regular fa-comment"></i>
-            <p id="postComments"><%= post.comments%> comments</p>
-          </div>
-        </div>
-      </div>
-      <div class="commentSection">
-        <div class="commentContainer">
-          <p>Comments (<%= post.comments%>)</p>
-          <form class="commentForm" method="post">
-            <textarea
-              name="content"
-              id="contentTextArea"
-              rows="10"
-              placeholder="Add your comment"
-            ></textarea>
-            <button class="btn" type="submit">comment</button>
-          </form>
-        </div>
-        <div class="comments">
-          <% if(comments.length===0){%>
-            <p class="errMessage">No Comments yet!</p>
-          <% } else{ comments.forEach(comment=>{%>
-          <div class="comment">
-            <div class="commentInfo">
-              <div class="profile">
-                <img src="./images/<%= comment.author.profileImg%>" alt="" />
-                <p><%= comment.author.name%></p>
-              </div>
-              <p><%= new Date(comment._doc.createdAt).toLocaleString()%></p>
-            </div>
-            <p>
-              <%= comment._doc.content%>
+            <p id="postComments">
+              <%= post.comments%> comments
             </p>
-            <div class="stats">
-              <div data-comment-id="<%= comment._doc._id%>" class="commentLikesContainer">
-                <i class="fa-regular fa-heart"></i>
-                <p><%= comment._doc.likes%> likes</p>
-              </div>
-              <div>
-                <i class="fa-regular fa-message"></i>
-                <p>Reply</p>
-              </div>
-            </div>
           </div>
-          <% })} %>
+        </div>
+    </div>
+    <div class="commentSection">
+      <div class="commentContainer">
+        <p>Comments (<%= post.comments%>)</p>
+        <form class="commentForm">
+          <textarea name="content" id="contentTextArea" rows="10" placeholder="Add your comment"></textarea>
+          <button class="btn" type="submit">comment</button>
+        </form>
+        <div class="errMessage">
         </div>
       </div>
-    </main>
-  </body>
-  <script
-    src="https://kit.fontawesome.com/3f2aa35973.js"
-    crossorigin="anonymous"
-  ></script>
-  <script src="./js/main.js"></script>
-  <script src="./js/htmx.min.js"></script>
-  <script>
-    const postLikes=document.getElementById("postLikesContainer")
-    const commentLikes=document.querySelectorAll(".commentLikesContainer")
-    const commentSection=document.querySelector(".comments")
-    const commentForm=document.querySelector(".commentForm")
-    const contentTextArea=document.getElementById("contentTextArea")
+      <div class="comments">
+        <% if(comments.length===0){%>
+          <p class="errMessage">No Comments yet!</p>
+          <% } else{ comments.forEach(comment=>{%>
+            <div class="comment">
+              <div class="commentTopBar">
+                <div class="commentInfo">
+                  <div class="profile">
+                    <img src="./images/<%= comment.author.profileImg%>" alt="" />
+                    <p>
+                      <%= comment.author.name%>
+                    </p>
+                  </div>
+                  <p class="commentDateTime">
+                    <%= new Date(comment._doc.createdAt).toLocaleString()%>
+                  </p>
+                </div>
+                <% if(user && user.roles==="admin"){ %>
+                <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
+                <div class="commentOptions options">
+                  <a class="commentEdit" href="">Edit</a>
+                  <a data-post-id="<%= comment.author._id%>" class="commentDelete" href="#">Delete</a>
+                </div>
+                <% } %>
+              </div>
+              <p>
+                <%= comment._doc.content%>
+              </p>
+              <div class="stats">
+                <div data-comment-id="<%= comment._doc._id%>" class="commentLikesContainer">
+                  <i class="fa-regular fa-heart"></i>
+                  <p>
+                    <%= comment._doc.likes%> likes
+                  </p>
+                </div>
+                <div>
+                  <i class="fa-regular fa-message"></i>
+                  <p>Reply</p>
+                </div>
+              </div>
+            </div>
+            <% })} %>
+      </div>
+    </div>
+  </main>
+</body>
+<script src="https://kit.fontawesome.com/3f2aa35973.js" crossorigin="anonymous"></script>
+<script src="./js/main.js"></script>
+<script src="./js/popups.js"></script>
+<script>
+  const postLikes = document.getElementById("postLikesContainer")
+  const commentLikes = document.querySelectorAll(".commentLikesContainer")
+  const commentSection = document.querySelector(".comments")
+  const commentForm = document.querySelector(".commentForm")
+  const contentTextArea = document.getElementById("contentTextArea")
+  const errMessage = document.querySelector(".errMessage")
 
-    commentLikes.forEach(commentLike=>{
-      commentLike.addEventListener("click",async()=>{
-        const {commentId}=commentLike.dataset
-        if(!commentId) return
-        const response=await fetch(`/dashboard/likeComment?cid=${commentId}`,{method:"POST"})
-        const data=await response.json()
-        commentLike.children[1].textContent=`${data.likes} likes`
-      })
+  const urlParams = new URLSearchParams(window.location.search)
+
+  commentLikes.forEach(commentLike => {
+    commentLike.addEventListener("click", async () => {
+      const { commentId } = commentLike.dataset
+      if (!commentId) return
+      const response = await fetch(`/posts/likeComment?cid=${commentId}`, { method: "POST" })
+      const data = await response.json()
+      commentLike.children[1].textContent = `${data.likes} likes`
     })
+  })
 
-    postLikes.addEventListener("click",async()=>{
-      const urlParams=new URLSearchParams(window.location.search)
-      const response=await fetch(`/dashboard/likePost?pid=${urlParams.get("pid")}`)
-      const data=await response.json()
-      postLikes.children[1].textContent=`${data.likes} likes`
-    })
+  postLikes.addEventListener("click", async () => {
+    const response = await fetch(`/posts/likePost?pid=${urlParams.get("pid")}`)
+    const data = await response.json()
+    postLikes.children[1].textContent = `${data.likes} likes`
+  })
 
 
 
-    commentForm.addEventListener("submit",async(e)=>{
-      e.preventDefault()
-      console.log("Hello")
-      const response=await fetch("/dashboard/newComment?pid=<%= post._id%>",{
-        method:"POST",
-        body:JSON.stringify({
-          content:contentTextArea.value
-        }),
-        headers:{
+  commentForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(`/posts/newComment?pid=${urlParams.get("pid")}`, {
+        method: "POST",
+        body: JSON.stringify({ content: contentTextArea.value }),
+        headers: {
           'Content-Type': 'application/json'
         }
       })
-      const data=await response.json()
-
-      document.getElementById("postComments").textContent=`${data.comments.length} comments`
-      if(data.comments.length===0){
-        commentSection.innerHTML='<p class="errMessage">No Comments yet!</p>'
-        return
-      }
+      const data = await response.json()
+      document.getElementById("postComments").textContent = `${data.comments.length} comments`
+      document.querySelector(".commentContainer>p").textContent = `Comments (${data.comments.length})`
       updateComments(data.comments)
-    })
+    } catch (err) {
+      console.log(`Error: ${err}`)
+      errMessage.style.display = "block"
+      errMessage.innerHTML = "<p>Please login to add comments.</p>"
+    }
+  })
 
-    const updateComments=(comments)=>{
-      commentSection.innerHTML=''
-      comments.forEach(comment=>{
-        commentSection.innerHTML+=`
+  const updateComments = (comments) => {
+    if (comments.length === 0) {
+      commentSection.innerHTML = '<p class="errMessage">No Comments yet!</p>'
+      return
+    }
+    commentSection.innerHTML = ''
+    comments.forEach(comment => {
+      commentSection.innerHTML += `
           <div class="comment">
-            <div class="commentInfo">
-              <div class="profile">
-                <img src="./images/${comment.author.profileImg}" alt="" />
-                <p>${comment.author.name}</p>
+            <div class="commentTopBar">
+              <div class="commentInfo">
+                <div class="profile">
+                  <img src="./images/${comment.author.profileImg}" alt="" />
+                  <p>${comment.author.name}</p>
+                </div>
+                <p>${new Date(comment._doc.createdAt).toLocaleString()}</p>
+              <p>${comment._doc.content}</p>
               </div>
-              <p>${new Date(comment._doc.createdAt).toLocaleString()}</p>
+              <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
+              <div class="commentOptions options">
+                <a class="commentEdit" href="">Edit</a>
+                <a data-post-id="${comment._doc._id}" class="commentDelete" href="#">Delete</a>
+              </div>
             </div>
-            <p>
-              ${comment._doc.content}
-            </p>
             <div class="stats">
               <div data-comment-id="${comment._doc._id}" class="commentLikesContainer">
                 <i class="fa-regular fa-heart"></i>
@@ -240,8 +272,9 @@
               </div>
             </div>
           </div>`
-      })
-    }
+    })
+  }
 
-  </script>
+</script>
+
 </html>

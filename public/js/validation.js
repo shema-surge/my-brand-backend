@@ -18,7 +18,7 @@ const validateEmptyPasswd=(passwdStr)=>{
 }
 
 const validatePasswd=(passwd)=>{
-    const passwdRegex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,12}$/
+    const passwdRegex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,30}$/
     if(!passwd) return 'Password field cannot be empty!'
     if(!passwd.match(passwdRegex)) return 'Please enter a valid password'
     return ''

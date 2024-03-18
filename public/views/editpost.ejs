@@ -19,22 +19,22 @@
     <nav class="mobileNavigation">
       <ul>
         <li>
-          <a class="nav-item" href="/">About
+          <a class="nav-item" href="./index#aboutSection">About
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="/">My Work
+          <a class="nav-item" href="./index#projectsSection">My Work
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="/blog">Blog
+          <a class="nav-item" href="./blog">Blog
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="/">Contact Me
+          <a class="nav-item" href="./index#contactSection">Contact Me
             <div></div>
           </a>
         </li>
@@ -48,30 +48,30 @@
       <i class="fa-solid fa-chevron-down"></i>
     </div>
     <div class="mobileProfileOptions">
-      <a href="/dashboard">Dashboard</a>
-      <a href="/blog">Log out</a>
+      <a href="/posts">Dashboard</a>
+      <a href="/logout">Logout</a>
     </div>
   </div>
   <header>
     <nav class="navigation">
       <ul>
         <li>
-          <a class="nav-item" href="/">About
+          <a class="nav-item" href="./index#aboutSection">About
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="/">My Work
+          <a class="nav-item" href="./index#projectsSection">My Work
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="/blog">Blog
+          <a class="nav-item" href="./blog">Blog
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="/">Contact Me
+          <a class="nav-item" href="./index#contactSection">Contact Me
             <div></div>
           </a>
         </li>
@@ -83,8 +83,8 @@
       <div></div>
     </div>
     <div class="profileOptions">
-      <a href="/dashboard">Dashboard</a>
-      <a href="#">Logout</a>
+      <a href="/posts">Dashboard</a>
+      <a href="/logout">Logout</a>
     </div>
     <div id="wide-screen-profile" class="profileContainer">
       <div>
@@ -103,7 +103,7 @@
       <option value="Account">Account</option>
     </select>
     <div class="sectionContainer">
-      <a href="/dashboard">
+      <a href="/posts">
         <div class="section active">
           <p class="sectionName">Posts</p>
           <p class="sectionCount">121</p>
@@ -135,10 +135,10 @@
     </div>
     <div class="mainContent">
       <div class="editor">
-        <form action="/dashboard/newPost" method="post" class="postForm">
-          <input type="text" name="title" id="" placeholder="New Post Title" required/>
+        <form action="/posts/editPost?pid=<%=post._id%>" method="post" class="postForm">
+          <input type="text" name="title" id="titleInput" placeholder="New Post Title" required/>
           <textarea name="content" id="mytextarea" cols="30" rows="10" placeholder="Write your post content here"></textarea>
-          <button class="btn" type="submit">Publish</button>
+          <button class="btn" type="submit">Save Changes</button>
         </form>
       </div>
     </div>
@@ -159,5 +159,22 @@
 <script src="../js/main.js"></script>
 <script src="../js/popups.js"></script>
 <script src="../js/navigation.js"></script>
+<script>
+
+const postForm=document.querySelector(".postForm")
+const titleInput=document.querySelector("#titleInput")
+const mytextarea=document.querySelector("#mytextarea")
+
+window.addEventListener("DOMContentLoaded",async()=>{
+  const urlParams=new URLSearchParams(window.location.search)
+  const pid=urlParams.get("pid")
+  const response=await fetch(`/posts/getPost?pid=${pid}`)
+  const data=await response.json()
+  titleInput.value=data.post.title;
+  mytextarea.value=data.post.content;
+})
+
+
+</script>
 
 </html>

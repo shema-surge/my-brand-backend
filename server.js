@@ -21,16 +21,18 @@ app.use("/images", express.static("public/images"));
 app.set('view engine','ejs')
 app.set("views",path.join(__dirname,'public/views'))
 
-
 //routes
 const mainRouter=require("./routes/main")
-const dashboardRouter=require("./routes/dashboard")
+const postsRouter=require("./routes/posts")
 const messageRouter=require("./routes/messages")
 const userRouter=require("./routes/users")
-const accountRouter=require("./routes/account")
+const accountRouter=require("./routes/account");
+const { authenticateUser } = require("./middleware/auth");
+
+app.use(authenticateUser)
 
 app.use("/",mainRouter)
-app.use("/dashboard",dashboardRouter)
+app.use("/posts",postsRouter)
 app.use("/messages",messageRouter)
 app.use("/users",userRouter)
 app.use("/account",accountRouter)

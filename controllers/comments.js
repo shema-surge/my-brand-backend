@@ -16,8 +16,9 @@ const createNewComment=async(req,res)=>{
      })
      const modifiedComments=await Promise.all(promiseArray)
     await posts.findByIdAndUpdate(pid,{comments:allComments.length})
-    res.json({comments:modifiedComments})
+    res.json({status:"successfull",comments:modifiedComments})
     }catch(err){
+      res.json({status:"failed"})
       console.log(err)
     }
 }
@@ -36,6 +37,17 @@ const likeComment=async(req,res)=>{
     await comment.save()
     res.json({likes:comment.likes})
   }catch(err){
+    console.log(err)
+  }
+}
+
+const deleteComment=async(req,res)=>{
+  const {cid}=req.query
+  try{
+    const deletedComment=await comments.deleteOne({_id:cid})
+    res.json({status:"successful",comment:deletedComment})
+  }catch(err){
+    res.json({status:"failed"})
     console.log(err)
   }
 }

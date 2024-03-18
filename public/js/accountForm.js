@@ -57,8 +57,8 @@ confirmNewPasswdInput.addEventListener('keyup',(e)=>{
 
 
 profileForm.addEventListener("submit",(event)=>{
-    event.preventDefault()
     if(validateName(nameInput.value) || validateEmail(emailInput.value)){
+        event.preventDefault()
         profileErrMessage.style.display="block"
         profileErrMessage.innerHTML="<p>Please fill the form as instructed.</p>"
     }else{

@@ -1,10 +1,13 @@
 const {Router}=require("express")
 const router=Router()
-const {authenticateUser}=require("../middleware/auth")
-const {errHandler}=require("../middleware/errorHandler")
-const {renderDashboardMessages, createNewMessage}=require("../controllers/messages")
+const {renderMessages, createNewMessage, deleteMessage, getMessages}=require("../controllers/messages")
+const { authenticateUser } = require("../middleware/auth")
 
-router.get('/',authenticateUser,errHandler,renderDashboardMessages)
+router.use(authenticateUser)
+
+router.get('/',renderMessages)
+router.get('/getMessages',getMessages)
 router.post('/newMessage',createNewMessage)
+router.delete('/deleteMessage',deleteMessage)
 
 module.exports=router

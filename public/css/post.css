@@ -26,9 +26,9 @@ body{
     color:var(--light)
 }
 
-.commentContainer p{
-    font-size: 15px;
-    font-weight: 800;
+.commentContainer>p{
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .commentForm{
@@ -52,18 +52,40 @@ body{
 .comment{
     font-size: 14px;
     font-weight: 500;
+    padding:20px;
+    margin:1rem 0;
+    border-radius: 5px;
+    position: relative;
+}
+
+.comment:hover{
+    background-color: var(--dark);
+}
+
+.commentTopBar{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .commentInfo{
     display:flex;
     align-items: center;
     gap:1rem;
-    margin:1rem 0;
+}
+
+.commentDateTime{
+    font-size: 13px;
 }
 
 .profile{
     display: flex;
     align-items: center;
+}
+
+.commentOptions{
+    top:63px;
+    right:20px;
 }
 
 .comment>p{

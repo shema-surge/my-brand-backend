@@ -1,9 +1,8 @@
 const {Router}=require("express")
 const router=Router()
-const {authenticateUser}=require("../middleware/auth")
-const {errHandler}=require("../middleware/errorHandler")
-const { renderUsers } = require("../controllers/users")
+const { renderUsers, getUsers } = require("../controllers/users")
 
-router.get('/',authenticateUser,errHandler,renderUsers)
+router.get('/',renderUsers)
+router.get('/getUsers',getUsers)
 
 module.exports=router

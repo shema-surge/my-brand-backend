@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="../css/main.css" />
   <link rel="stylesheet" href="../css/dashboard.css" />
   <link rel="stylesheet" href="../css/editor.css" />
+  <script src="https://cdn.tiny.cloud/1/ppb32616swnbw1qrrocbjcyp3cgw82wjezkmh72qocql2pcq/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+  tinymce.init({
+    selector: '#mytextarea',
+  });
+</script>
 </head>
 
 <body>
@@ -19,22 +26,22 @@
     <nav class="mobileNavigation">
       <ul>
         <li>
-          <a class="nav-item" href="./index#aboutSection">About
+          <a class="nav-item" href="/">About
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index#projectsSection">My Work
+          <a class="nav-item" href="/">My Work
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./blog">Blog
+          <a class="nav-item" href="/blog">Blog
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index#contactSection">Contact Me
+          <a class="nav-item" href="/">Contact Me
             <div></div>
           </a>
         </li>
@@ -48,30 +55,30 @@
       <i class="fa-solid fa-chevron-down"></i>
     </div>
     <div class="mobileProfileOptions">
-      <a href="./dashboard">Dashboard</a>
-      <a href="./blog">Log out</a>
+      <a href="/posts">Dashboard</a>
+      <a href="/logout">Log out</a>
     </div>
   </div>
   <header>
     <nav class="navigation">
       <ul>
         <li>
-          <a class="nav-item" href="./index#aboutSection">About
+          <a class="nav-item" href="/">About
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index#projectsSection">My Work
+          <a class="nav-item" href="/">My Work
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./blog">Blog
+          <a class="nav-item" href="/blog">Blog
             <div></div>
           </a>
         </li>
         <li>
-          <a class="nav-item" href="./index#contactSection">Contact Me
+          <a class="nav-item" href="/">Contact Me
             <div></div>
           </a>
         </li>
@@ -83,8 +90,8 @@
       <div></div>
     </div>
     <div class="profileOptions">
-      <a href="#">Dashboard</a>
-      <a href="#">Logout</a>
+      <a href="/posts">Dashboard</a>
+      <a href="/logout">Logout</a>
     </div>
     <div id="wide-screen-profile" class="profileContainer">
       <div>
@@ -103,7 +110,7 @@
       <option value="Account">Account</option>
     </select>
     <div class="sectionContainer">
-      <a href="/dashboard">
+      <a href="/posts">
         <div class="section active">
           <p class="sectionName">Posts</p>
           <p class="sectionCount">121</p>
@@ -135,10 +142,10 @@
     </div>
     <div class="mainContent">
       <div class="editor">
-        <form action="/dashboard/editPost?pid=<%=post._id%>" method="post" class="postForm">
-          <input type="text" name="title" id="titleInput" placeholder="New Post Title" required/>
+        <form action="/posts/newPost" method="post" class="postForm">
+          <input type="text" name="title" id="" placeholder="New Post Title" required/>
           <textarea name="content" id="mytextarea" cols="30" rows="10" placeholder="Write your post content here"></textarea>
-          <button class="btn" type="submit">Save Changes</button>
+          <button class="btn" type="submit">Publish</button>
         </form>
       </div>
     </div>
@@ -146,32 +153,8 @@
 </body>
 <script src="https://kit.fontawesome.com/3f2aa35973.js" crossorigin="anonymous"></script>
 
-
-<script src="https://cdn.tiny.cloud/1/ppb32616swnbw1qrrocbjcyp3cgw82wjezkmh72qocql2pcq/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
-<script>
-  tinymce.init({
-    selector: '#mytextarea',
-  });
-</script>
-
-
 <script src="../js/main.js"></script>
 <script src="../js/popups.js"></script>
 <script src="../js/navigation.js"></script>
-<script>
-
-const postForm=document.querySelector(".postForm")
-const titleInput=document.querySelector("#titleInput")
-const mytextarea=document.querySelector("#mytextarea")
-
-window.addEventListener("DOMContentLoaded",()=>{
-  console.log("Hello")
-  titleInput.value=`<%=post.title%>`;
-  mytextarea.value=`<%-post.content%>`;
-})
-
-
-</script>
 
 </html>

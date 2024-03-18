@@ -6,7 +6,7 @@
     <title>Blog</title>
     <link rel="stylesheet" href="./css/main.css" />
     <link rel="stylesheet" href="./css/dashboard.css" />
-    <link rel="stylesheet" href="./css/users.css" />
+    <link rel="stylesheet" href="./css/notifications.css" />
   </head>
   <body>
     <div class="mobileHeader">
@@ -44,14 +44,14 @@
       </nav>
       <div id="mobile-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg%>" alt="" />
+          <img src="./images/<%=user.profileImg>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
       </div>
       <div class="mobileProfileOptions">
-        <a href="./dashboard.html">Dashboard</a>
-        <a href="./blog.html">Log out</a>
+        <a href="/posts">Dashboard</a>
+        <a href="/logout">Log out</a>
       </div>
     </div>
     <header>
@@ -89,12 +89,12 @@
         <div></div>
       </div>
       <div class="profileOptions">
-        <a href="#">Dashboard</a>
-        <a href="#">Logout</a>
+        <a href="/posts">Dashboard</a>
+        <a href="/logout">Logout</a>
       </div>
       <div id="wide-screen-profile" class="profileContainer">
         <div>
-          <img src="./images/<%=user.profileImg%>" alt="" />
+          <img src="./images/<%=user.profileImg>" alt="" />
           <p><%=user.name%></p>
         </div>
         <i class="fa-solid fa-chevron-down"></i>
@@ -104,12 +104,12 @@
       <select class="mobileSectionContainer" name="dashpage" id="dashNavigation">
         <option value="Posts">Posts (14)</option>
         <option value="Messages">Messages (121)</option>
-        <option value="Users" selected>Users (234)</option>
-        <option value="Notifications">Notifications (121)</option>
+        <option value="Users">Users (234)</option>
+        <option value="Notifications" selected>Notifications (121)</option>
         <option value="Account">Account</option>
       </select>
       <div class="sectionContainer">
-        <a href="/dashboard">
+        <a href="/posts">
           <div class="section">
             <p class="sectionName">Posts</p>
             <p class="sectionCount">121</p>
@@ -122,13 +122,13 @@
           </div>
         </a>
         <a href="/users">
-          <div class="section active">
+          <div class="section">
             <p class="sectionName">Users</p>
             <p class="sectionCount">123</p>
           </div>
         </a>
         <a href="/notifications">
-          <div class="section">
+          <div class="section active">
             <p class="sectionName">Notifications</p>
             <p class="sectionCount">12</p>
           </div>
@@ -151,24 +151,27 @@
         </div>
       </div>
       <div class="mainContent">
-        <div class="users">
-          <% users.forEach(user=>{%>
-            <div class="user">
-                <div class="userData">
-                    <img src="./images/User-Profile-PNG-Image 2.png" alt="">
-                    <div class="userInfo">
-                        <div class="nameContainer"><p>Name:</p><p><%= user.name%></p></div>
-                        <div class="userEmail"><p>From:</p><p><%= user.email%></p></div>
-                        <div class="userRole"><p>Role:</p><p><%= user.roles%></p></div>
-                        <div class="userJoined"><p>Joined:</p><p><%= new Date(user.createdAt).toLocaleString()%></p></div>
+        <div class="notifications">
+            <div class="notification">
+                <p class="notificationContent">A new user @jackthecoder has joined the blog</p>
+                <div class="notificationSideContainer">
+                    <p class="notificationTime">1:38PM</p>
+                    <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
+                    <div class="notificationOptions options">
+                      <a href="#">Dismiss</a>
                     </div>
                 </div>
-                <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
-                <div class="userOptions options">
-                  <a href="#">Delete</a>
+            </div>
+            <div class="notification">
+                <p class="notificationContent">A new user @jackthecoder has joined the blog</p>
+                <div class="notificationSideContainer">
+                    <p class="notificationTime">1:38PM</p>
+                    <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
+                    <div class="notificationOptions options">
+                      <a href="#">Dismiss</a>
+                    </div>
                 </div>
             </div>
-          <% }) %>     
         </div>
       </div>
     </main>

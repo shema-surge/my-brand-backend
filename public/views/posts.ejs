@@ -50,8 +50,8 @@
         <i class="fa-solid fa-chevron-down"></i>
       </div>
       <div class="mobileProfileOptions">
-        <a href="./dashboard">Dashboard</a>
-        <a href="./blog">Log out</a>
+        <a href="/posts">Dashboard</a>
+        <a href="/logout">Log out</a>
       </div>
     </div>
     <header>
@@ -89,8 +89,8 @@
         <div></div>
       </div>
       <div class="profileOptions">
-        <a href="#">Dashboard</a>
-        <a href="#">Logout</a>
+        <a href="/posts">Dashboard</a>
+        <a href="/logout">Logout</a>
       </div>
       <div id="wide-screen-profile" class="profileContainer">
         <div>
@@ -109,7 +109,7 @@
         <option value="Account">Account</option>
       </select>
       <div class="sectionContainer">
-        <a href="/dashboard">
+        <a href="/posts">
           <div class="section active">
             <p class="sectionName">Posts</p>
             <p class="sectionCount">121</p>
@@ -177,14 +177,14 @@
                 </div>
                 <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
                 <div class="postOptions options">
-                  <a class="postEdit" href="/dashboard/editPost?pid=<%=post._id%>">Edit</a>
-                  <a data-post-id="<%= post._id%>" class="postDelete" href="#">Delete</a>
+                  <a class="postEdit" href="/posts/editPost?pid=<%=post._id%>">Edit</a>
+                  <a onclick="deletePost('<%= post._id%>')" class="postDelete" href="#">Delete</a>
                 </div>
               </div>
             </div>
           <% })}%>
         </div>
-        <a href="/dashboard/newpost" class="newPost btn">New Post</a>
+        <a href="/posts/newpost" class="newPost btn">New Post</a>
       </div>
     </main>
     <div class="confirmPopup">
@@ -210,29 +210,35 @@
     const confirmBtn=document.querySelector(".confirmBtn")
     const cancelBtn=document.querySelector(".cancelBtn")
 
-    postDeleteBtns.forEach(btn=>{
-      btn.addEventListener("click",()=>{
-        if(confirmPopup.style.display==="" || confirmPopup.style.display==="none") confirmPopup.style.display="block"
-        confirmBtn.setAttribute("data-post-id",btn.dataset.postId)
-      })
-    })
+    const deletePost=(pid)=>{
+      if(confirmPopup.style.display==="block") return
+      confirmPopup.style.display="block"
+      confirmBtn.onclick=()=>{
+        deleteResource(pid)
+        confirmPopup.style.display="none"
+      }
+    }
 
-    confirmBtn.addEventListener("click",async()=>{
-      const {postId}=confirmBtn.dataset
-      const response=await fetch(`/dashboard/deletePost?pid=${postId}`,{method:"POST"})
+    const deleteResource=async(pid)=>{
+      const response=await fetch(`/posts/deletePost?pid=${pid}`,{method:"DELETE"})
       const data=await response.json()
       console.log(data)
-      if(data.posts) updatePosts(data.posts)
-      confirmPopup.style.display="none"
-    })
+      updatePosts()
+    }
 
-    cancelBtn.addEventListener("click",async()=>{
+    cancelBtn.onclick=()=>{
       confirmPopup.style.display="none"
-    })
+    }
 
-    const updatePosts=(postsData)=>{
+    const updatePosts=async()=>{
+      const response=await fetch(`/posts/getPosts`)
+      const data=await response.json()
+      if(!data||data.status==="failed"){
+        postsContainer.innertHTML='<p class="errMessage">An error occured, please refresh this page.</p>'
+        return
+      }
       postsContainer.innerHTML=""
-      postsData.forEach(post=>{
+      data.posts.forEach(post=>{
         postsContainer.innerHTML+=`
         <div class="post">
               <div class="postData">
@@ -256,8 +262,8 @@
                 </div>
                 <i class="fa-solid fa-ellipsis moreOptionsBtn"></i>
                 <div class="postOptions options">
-                  <a class="postEdit" href="/dashboard/editPost?pid=${post._id}">Edit</a>
-                  <a data-post-id="${post._id}" class="postDelete" href="#">Delete</a>
+                  <a class="postEdit" href="/posts/editPost?pid=${post._id}">Edit</a>
+                  <a class="postDelete" onclick="deletePost('${post._id}')">Delete</a>
                 </div>
               </div>
             </div>

@@ -22,33 +22,22 @@
     align-items: center;
 }
 
-.messageData>div{
+.messageData{
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.messageData p{
     color:var(--light);
-}
-
-.timeSent{
     font-size: 13px;
-    font-weight: 600;
-}
-
-.messageProfile{
-    display: flex;
-    align-items: center;
-    gap:10px;
-}
-
-.messageProfile>p{
-    font-size:15px;
     font-weight: 600;
 }
 
 .senderEmail{
     color:var(--light);
-    margin:1rem 0;
-    font-size: 15px;
+    margin:10px 0;
+    font-size: 13px;
 }
 
 .senderEmail span{
@@ -61,7 +50,7 @@
 }
 
 .messageContent{
-    font-size: 15px;
+    font-size: 13px;
     color:var(--light)
 }
 

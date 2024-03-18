@@ -3,7 +3,7 @@ const dashNavigation=document.querySelector("#dashNavigation")
 dashNavigation.addEventListener('change',()=>{
     switch(dashNavigation.value){
         case "Posts":
-            window.location.href="/dashboard"
+            window.location.href="/posts"
             break
         case "Messages":
             window.location.href="/messages"

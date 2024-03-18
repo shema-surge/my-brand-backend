@@ -1,7 +1,5 @@
 const {Router}=require("express")
-const { login,signup } = require("../controllers/users")
-const {authenticateUser}=require("../middleware/auth")
-const {errHandler}=require("../middleware/errorHandler")
+const { login,signup, logout } = require("../controllers/users")
 const {renderPost, renderBlogPosts}=require("../controllers/posts")
 const { createNewMessage } = require("../controllers/messages")
 const router=Router()
@@ -18,10 +16,11 @@ router.get("/signup", (req, res) => {
     res.render("signup",{});
 });
   
-router.post('/login',login)
+router.post("/login",login)
 router.post("/signup", signup);
+router.get("/logout",logout)
 router.post("/newMessage",createNewMessage)
-router.get('/post',authenticateUser,errHandler,renderPost)
-router.get("/blog",authenticateUser,renderBlogPosts)
+router.get('/post',renderPost)
+router.get("/blog",renderBlogPosts)
 
 module.exports=router

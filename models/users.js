@@ -14,7 +14,7 @@ const userSchema=new Schema({
         type:String,
         required:true
     },
-    roles:{
+    role:{
         type:String,
         enum:["admin","user"],
         default:"user"
@@ -22,6 +22,11 @@ const userSchema=new Schema({
     profileImg:{
         type:String,
         default: "User-Profile-PNG-Image 1.png"
+    },
+    status:{
+        type:String,
+        enum:["frozen","active"],
+        default:"active"
     }
 },{timestamps:true})
 

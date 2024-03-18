@@ -1,10 +1,9 @@
-const moreOptionsBtn=document.querySelectorAll(".moreOptionsBtn")
-const options=document.querySelectorAll(".options")
+const ellipsisBtn=document.querySelectorAll(".moreOptionsBtn")
 let currentActive=null
 
 
 
-moreOptionsBtn.forEach(btn=>{
+ellipsisBtn.forEach(btn=>{
     btn.addEventListener('click',(event)=>{
         let optionMenu=btn.nextElementSibling
         if(optionMenu.style.display==="flex"){
