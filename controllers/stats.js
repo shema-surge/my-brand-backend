@@ -5,7 +5,7 @@ const users=require("./models/users")
 const getStats=async()=>{
     const postCount=await posts.estimatedDocumentCount()
     const messageCount=await messages.estimatedCount()
-    const userCunt=await users.estimatedCount()
+    const userCount=await users.estimatedCount()
     return {postCount,messageCount,userCount}
 }
 

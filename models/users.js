@@ -25,8 +25,8 @@ const userSchema=new Schema({
     },
     status:{
         type:String,
-        enum:["frozen","active"],
-        default:"active"
+        enum:["inactive","active"],
+        default:"inactive"
     }
 },{timestamps:true})
 

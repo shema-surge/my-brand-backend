@@ -10,12 +10,16 @@ const messageSchema=new Schema({
         required:true,
         unique:true
     },
+    subject:{
+        type:String,
+        required:true
+    },
     message:{
         type:String,
         required:true
     },
     readBy:[Types.ObjectId],
-    sent:{
+    createdAt:{
         type:Date,
         default:Date.now()
     }

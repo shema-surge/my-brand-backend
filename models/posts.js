@@ -27,4 +27,5 @@ const postSchema=new Schema({
     }
 },{timestamps:true})
 
+
 module.exports= model('posts',postSchema)

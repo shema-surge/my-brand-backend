@@ -1,29 +1,35 @@
 const jwt=require("jsonwebtoken")
+const cloudinary=require("cloudinary").v2
 const bcrypt=require("bcrypt")
 
 const users=require("../models/users")
+const keys = require("../models/keys")
+const {sendMail}=require("../utilities/mail")
+
+//cloudinary configuration
+cloudinary.config()
 
 const login=async(req,res)=>{
     try{
-      console.log(req.body)
       const {email,password}=req.body
-      if(!email || !password) throw new Error("Missing data fields")
+      if(!email || !password) return res.status(400).json({status:"failed",message:"Missing Data Fields"})
       const user=await users.findOne({email:email})
-      if(!user) res.send("<p>Wrong email or password, try again!</p>")
+      if(!user) return res.status(401).json({status:"failed",message:"Wrong Email or Password"})
       const validPasswd=await bcrypt.compare(password,user.password)
-      if(!validPasswd) res.send("<p>Wrong email or password, try again!</p>")
+      if(!validPasswd) return res.status(401).json({status:"failed",message:"Wrong Email or Password"})
       const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:60*60})
       res.cookie("token",token)
-      res.redirect('/posts')
+      res.status(200).json({status:"successfull",message:"Logged in successfully!"})
     }catch(err){
       console.log(err)
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
     }
 }
 
 const logout=(req,res)=>{
   try{
     res.cookie("token","")
-    res.redirect("/blog")
+    res.status(200).json({status:"successfull",message:"logged out"})
   }catch(err){
     console.log(err)
   }
@@ -32,41 +38,91 @@ const logout=(req,res)=>{
 const signup=async (req, res) => {
     try {
       const { name, email, password, verifyPassword } = req.body;
-      if (!name || !email || !password || password !== verifyPassword) throw new Error("Missing data fields or non matching passwords");
+      if (!name || !email || !password || !verifyPassword) return res.status(400).json({status:"failed",message:"Missing Data Fields"})
+      if(password !== verifyPassword) return res.status(400).json({status:"failed",message:"Passwords do not match"})
+      const existingUser=await users.findOne({email:email})
+      if(existingUser) return res.status(401).json({status:"failed",message:"User Account Taken"})
       const salt=await bcrypt.genSalt(10)
       const hashedPasswd= await bcrypt.hash(password,salt)
-      await users.create({ name, email, password:hashedPasswd })
-      res.redirect('/login')
+      const user=await users.create({ name, email, password:hashedPasswd })
+      const activationKey=await keys.create({user:user._id,keyType:"activation"})
+      console.log(activationKey)
+
+      await sendMail(user.email,"Account Activation",`
+      <html>
+      <body>
+      <p>click on this <a href="http://172.21.126.12:4500/users/activate/${activationKey.key}">link</a> to activate your account</p><br>
+      <p>The activation link expires in 30 minutes after arrival.</p>
+      </body>
+      </html>
+      `)
+
+      res.status(200).json({status:"successfull",message:"Signup complete, Please Activate Your Account Via The Link Sent To Your Email"})
     } catch (err) {
       console.log(err);
+      return res.status(500).json({status:"failed",message:"Internal Server Error"})
     }
 }
 
-const renderUsers=async (req,res)=>{
+const resendActivationLink=async(req,res)=>{
+    try{
+      const activationKey=await keys.create({user:req.user._id,keyType:"activation"})
+      await sendMail(req.user.email,"Account Activation",`
+      <html>
+      <body>
+      <p>click on this <a href="http://172.21.126.12:4500/users/activate/${activationKey.key}">link</a> to activate your account</p><br>
+      <p>The activation link expires in 30 minutes after arrival.</p>
+      </body>
+      </html>
+      `)
+      res.status(200).json({status:"successfull",message:"Please check your email for an activation link"})
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({status:"failed",message:"Internal Server Error"})
+    }
+}
+
+const getUser=async(req,res)=>{
   try{
-    const allUsers=await users.find()
-    res.render('users',{user:req.user,users:allUsers})
+    const {uid}=req.params
+    if(!uid) return res.status(400).json({status:"failed",message:"Bad Request"})
+    const user=await users.findById(uid)
+    res.status(200).json({status:"successfull",user})
   }catch(err){
     console.log(err)
+    return res.status(500).json({status:"failed",message:"Internal Server Error"})
   }
 }
 
-const renderAccount=async(req,res)=>{
+const getUsers=async (req,res)=>{
   try{
-    res.render("account",{user:req.user})
+    const allUsers=await users.find()
+    res.status(200).json({status:"successfull",users:allUsers})
   }catch(err){
     console.log(err)
+    return res.status(500).json({status:"failed",message:"Internal Server Error"})
   }
 }
 
 const editUserInfo=async(req,res)=>{
   try{
-    const {name,email}=req.body;
-    if(!name || !email) throw new Error("Missing data fields")
-    await users.findByIdAndUpdate(req.user._id,{name,email})
-    res.redirect("/posts")
+    const {name}=req.body;
+    if(!name) return res.status(400).json({status:"failed",message:"Missing Data Fields"})
+    let profileImg=req.user.profileImg
+
+    if(req.file){
+      const urlParts=profileImg.split('/')
+      const oldImgPublicId=urlParts[urlParts.length-1].split('.')[0]
+      const cloudinaryImg=await cloudinary.uploader.upload(req.file.path)
+      profileImg=cloudinaryImg.url
+      await cloudinary.uploader.destroy(oldImgPublicId)
+    }
+
+    const editedUser= await users.findByIdAndUpdate(req.user._id,{name,profileImg},{new:true})
+    res.status(200).json({status:"successfull",user:editedUser})
   }catch(err){
     console.log(err)
+    return res.status(500).json({status:"failed",message:"Internal Server Error"})
   }
 }
 
@@ -77,21 +133,11 @@ const changeUserPasswd=async(req,res)=>{
   }
 }
 
-const getUsers=async(req,res)=>{
-  try{
-    const allUsers=await users.find()
-    res.status(200).json({status:"successful",users:allUsers})
-  }catch(err){
-    res.status(500).json({status:"failed",message:"Internal Server Error"})
-    console.log(err)
-  }
-}
-
 const deleteUser=async(req,res)=>{
   try{
-    const {uid}=req.query
+    const {uid}=req.params
     const deletedUser=await users.deleteOne({_id:cid})
-    res.json({status:"successful",user:deletedUser})
+    res.json({status:"successful",deletedUser})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
     console.log(err)
@@ -101,7 +147,8 @@ const deleteUser=async(req,res)=>{
 const changeUserRole=async(req,res)=>{
   try{
     const {role}=req.body
-    const updatedUser=await users.findByIdAndUpdate(req.user._id,{role:role})
+    if(role!=="user" && role!=="admin") return res.status(400).json({status:"failed",message:"Invalid Role"})
+    const updatedUser=await users.findByIdAndUpdate(req.user._id,{role:role},{new:true})
     res.status(200).json({status:"successful",user:updatedUser})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
@@ -109,11 +156,11 @@ const changeUserRole=async(req,res)=>{
   }
 }
 
-const freezeUser=async(req,res)=>{
+const deactivateUser=async(req,res)=>{
   try{
-    if(req.user.status==="frozen") return res.status(400).json({status:"Bad Request",message:"User is already frozen"})
-    const frozenUser=await users.findByIdAndUpdate(req.user._id,{status:"frozen"})
-    res.status(200).json({status:"successful",user:frozenUser})
+    if(req.user.status==="inactive") return res.status(403).json({status:"failed",message:"User Is Already Inactive"})
+    const deactivatedUser=await users.findByIdAndUpdate(req.user._id,{status:"inactive"},{new:true})
+    res.status(200).json({status:"successful",user:deactivatedUser})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
     console.log(err)
@@ -122,8 +169,12 @@ const freezeUser=async(req,res)=>{
 
 const activateUser=async(req,res)=>{
   try{
-    if(req.user.status==="active") return res.status(400).json({status:"Bad Request",message:"User is already active"})
-    const activatedUser=await users.findByIdAndUpdate(req.user._id,{status:"active"})
+    const {key}=req.params
+    if(!key) return res.status(400).json({status:"failed",message:"Missing Activation Key"})
+    const existingKey=await keys.findOne({keyType:"activation",key:key})
+    if(!existingKey) return res.status(404).json({status:"failed",message:"Invalid Or Expired Activation Key"})
+    const activatedUser=await users.findByIdAndUpdate(existingKey.user,{status:"active"},{new:true})
+    await keys.deleteOne({keyType:"activation",key:key})
     res.status(200).json({status:"successful",user:activatedUser})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
@@ -131,4 +182,4 @@ const activateUser=async(req,res)=>{
   }
 }
 
-module.exports={login,signup,logout,renderUsers,renderAccount,getUsers,editUserInfo,deleteUser,changeUserPasswd,changeUserRole,freezeUser,activateUser}
+module.exports={login,signup,logout,getUser,getUsers,editUserInfo,deleteUser,changeUserPasswd,changeUserRole,resendActivationLink,deactivateUser,activateUser}

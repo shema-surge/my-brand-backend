@@ -1,55 +1,70 @@
-const users=require("../models/users")
 const posts=require("../models/posts")
 const comments=require("../models/comments")
-const likes=require("../models/likes")
+
+const getPostComments=async(req,res)=>{
+  try{
+    const {pid}=req.params
+    if(!pid) return res.status(400).json({status:"failed",message:"Missing post id"})
+
+    const post=await posts.findById(pid)
+    if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
+
+    const allPostComments=await comments.find({parent:pid}).sort({createdAt:-1})
+    res.status(200).json({status:"successfull",comments:allPostComments})
+
+  }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
+    console.log(err)
+  }
+}
 
 const createNewComment=async(req,res)=>{
     try{
      const {content}=req.body
-     const {pid}=req.query
-     if(!content || !pid) throw new Error("Missing data fields")
-     await comments.create({parent:pid,author:req.user._id,content})
-     let allComments=await comments.find({parent:pid})
-     const promiseArray=allComments.map(async(comment)=>{
-       const author=await users.findById(comment.author)
-       return {...comment,author:author}
-     })
-     const modifiedComments=await Promise.all(promiseArray)
-    await posts.findByIdAndUpdate(pid,{comments:allComments.length})
-    res.json({status:"successfull",comments:modifiedComments})
+     const {pid}=req.params
+
+     if(!pid) return res.status(400).json({status:"failed",message:"Missing post id"})
+     if(!content) return res.status(400).json({status:"failed",message:"Missing data fields"})
+
+     const post=await posts.findById(pid)
+     if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
+
+     const comment=await comments.create({parent:pid,author:req.user._id,content})
+
+      res.status(200).json({status:"successfull",comment})
+
     }catch(err){
-      res.json({status:"failed"})
+      res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err)
     }
 }
 
-const likeComment=async(req,res)=>{
+const editComment=async(req,res)=>{
   try{
-    let like=await likes.findOne({recipient:req.query.cid,user:req.user.id})
-    const comment=await comments.findById(req.query.cid)
-    if(!like){
-      await likes.create({recipient:req.query.cid,user:req.user._id})
-      comment.likes+=1
-    }else{
-      await likes.deleteOne({recipient:req.query.cid,user:req.user._id})
-      if(comment.likes>0) comment.likes-=1
-    }
-    await comment.save()
-    res.json({likes:comment.likes})
+    const {cid}=req.params
+    const {content}=req.body
+    if(!cid) return res.status(400).json({status:"failed",message:"Missing comment id"})
+    if(!content) return res.status(400).json({status:"failed",message:"Missing data fields"})
+    const editedComment=await comments.findByIdAndUpdate(cid,{content:content},{new:true})
+    if(!editedComment) return res.status(404).json({status:"failed",message:"No such post found"})
+    res.status(200).json({status:"successful",comment:editedComment})
   }catch(err){
+    res.status(500).json({status:"failed"})
     console.log(err)
   }
 }
 
 const deleteComment=async(req,res)=>{
-  const {cid}=req.query
   try{
-    const deletedComment=await comments.deleteOne({_id:cid})
-    res.json({status:"successful",comment:deletedComment})
+    const {cid}=req.params
+    if(!cid) return res.status(400).json({status:"failed",message:"Missing comment id"})
+    const deletedComment=await comments.findByIdAndDelete(cid)
+    if(!deletedComment) return res.status(404).json({status:"failed",message:"No such comment found"})
+    res.status(200).json({status:"successful",comment:deletedComment})
   }catch(err){
-    res.json({status:"failed"})
+    res.status(500).json({status:"failed"})
     console.log(err)
   }
 }
 
-module.exports={createNewComment,likeComment}
+module.exports={getPostComments,createNewComment,editComment,deleteComment}
