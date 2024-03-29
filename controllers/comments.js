@@ -1,5 +1,6 @@
 const posts=require("../models/posts")
 const comments=require("../models/comments")
+const users=require("../models/users")
 
 const getPostComments=async(req,res)=>{
   try{
@@ -10,7 +11,13 @@ const getPostComments=async(req,res)=>{
     if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
 
     const allPostComments=await comments.find({parent:pid}).sort({createdAt:-1})
-    res.status(200).json({status:"successfull",comments:allPostComments})
+    const promiseArray=allPostComments.map(async(comment)=>{
+      const author=await users.findById(comment.author)
+      return {...comment,author:author}
+    })
+    const modifiedComments=await Promise.all(promiseArray)
+    
+    res.status(200).json({status:"successfull",comments:modifiedComments})
 
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
@@ -29,7 +36,7 @@ const createNewComment=async(req,res)=>{
      const post=await posts.findById(pid)
      if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
 
-     const comment=await comments.create({parent:pid,author:req.user._id,content})
+     const comment=await comments.create({parent:post._id,author:req.user._id,content})
 
       res.status(200).json({status:"successfull",comment})
 

@@ -5,6 +5,7 @@ const bcrypt=require("bcrypt")
 const users=require("../models/users")
 const keys = require("../models/keys")
 const {sendMail}=require("../utilities/mail")
+const { NONAME } = require("dns")
 
 //cloudinary configuration
 cloudinary.config()
@@ -18,21 +19,11 @@ const login=async(req,res)=>{
       const validPasswd=await bcrypt.compare(password,user.password)
       if(!validPasswd) return res.status(401).json({status:"failed",message:"Wrong Email or Password"})
       const token=jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:60*60})
-      res.cookie("token",token)
-      res.status(200).json({status:"successfull",message:"Logged in successfully!"})
+      res.status(200).json({status:"successfull",token})
     }catch(err){
       console.log(err)
       res.status(500).json({status:"failed",message:"Internal Server Error"})
     }
-}
-
-const logout=(req,res)=>{
-  try{
-    res.cookie("token","")
-    res.status(200).json({status:"successfull",message:"logged out"})
-  }catch(err){
-    console.log(err)
-  }
 }
 
 const signup=async (req, res) => {
@@ -51,7 +42,7 @@ const signup=async (req, res) => {
       await sendMail(user.email,"Account Activation",`
       <html>
       <body>
-      <p>click on this <a href="http://172.21.126.12:4500/users/activate/${activationKey.key}">link</a> to activate your account</p><br>
+      <p>click on this <a href="${req.protocol}://${req.headers.host}/users/activate/${activationKey.key}">link</a> to activate your account</p><br>
       <p>The activation link expires in 30 minutes after arrival.</p>
       </body>
       </html>
@@ -70,7 +61,7 @@ const resendActivationLink=async(req,res)=>{
       await sendMail(req.user.email,"Account Activation",`
       <html>
       <body>
-      <p>click on this <a href="http://172.21.126.12:4500/users/activate/${activationKey.key}">link</a> to activate your account</p><br>
+      <p>click on this <a href="${req.protocol}://${req.headers.host}/users/activate/${activationKey.key}">link</a> to activate your account</p><br>
       <p>The activation link expires in 30 minutes after arrival.</p>
       </body>
       </html>
@@ -82,11 +73,21 @@ const resendActivationLink=async(req,res)=>{
     }
 }
 
+const getCurrentUser=async(req,res)=>{
+  try{
+    res.status(200).json({status:"successfull",user:req.user})
+  }catch(err){
+    console.log(err)
+    return res.status(500).json({status:"failed",message:"Internal Server Error"})
+  }
+}
+
 const getUser=async(req,res)=>{
   try{
     const {uid}=req.params
     if(!uid) return res.status(400).json({status:"failed",message:"Bad Request"})
     const user=await users.findById(uid)
+    if(!user) return res.status(404).json({status:"failed",message:"No such user found"})
     res.status(200).json({status:"successfull",user})
   }catch(err){
     console.log(err)
@@ -136,8 +137,9 @@ const changeUserPasswd=async(req,res)=>{
 const deleteUser=async(req,res)=>{
   try{
     const {uid}=req.params
-    const deletedUser=await users.deleteOne({_id:cid})
-    res.json({status:"successful",deletedUser})
+    const deletedUser=await users.deleteOne(uid)
+    if(!deletedUser) return res.status(404).json({status:"failed",message:"No such user"})
+    res.json({status:"successful",user:deletedUser})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
     console.log(err)
@@ -182,4 +184,4 @@ const activateUser=async(req,res)=>{
   }
 }
 
-module.exports={login,signup,logout,getUser,getUsers,editUserInfo,deleteUser,changeUserPasswd,changeUserRole,resendActivationLink,deactivateUser,activateUser}
+module.exports={login,signup,getCurrentUser,getUser,getUsers,editUserInfo,deleteUser,changeUserPasswd,changeUserRole,resendActivationLink,deactivateUser,activateUser}

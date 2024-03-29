@@ -22,7 +22,7 @@ const commentSchema=new Schema({
 
 commentSchema.post('save',async(doc,next)=>{
     try{
-        const post=await posts.findById(parent)
+        const post=await posts.findById(doc.parent)
         post.comments+=1
         await post.save()
     }catch(err){

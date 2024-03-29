@@ -1,4 +1,5 @@
 const {Schema,model, Types}=require('mongoose')
+const notifications = require('./notifications')
 
 const messageSchema=new Schema({
     name:{
@@ -8,7 +9,6 @@ const messageSchema=new Schema({
     email:{
         type:String,
         required:true,
-        unique:true
     },
     subject:{
         type:String,
@@ -18,10 +18,32 @@ const messageSchema=new Schema({
         type:String,
         required:true
     },
-    readBy:[Types.ObjectId],
+    read:{
+        type:Boolean,
+        default:false
+    },
     createdAt:{
         type:Date,
         default:Date.now()
+    }
+})
+
+messageSchema.post('findOne',async(doc,next)=>{
+    try{
+        doc.read=true
+        await doc.save()
+        next()
+    }catch(err){
+        console.log(err)
+    }
+})
+
+messageSchema.post('save',async(doc,next)=>{
+    try{
+        await notifications.create({content:`New message from email: ${doc.email},subject: ${doc.subject}`})
+        next()
+    }catch(err){
+        console.log(err)
     }
 })
 

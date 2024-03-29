@@ -1,4 +1,5 @@
-const messages=require("../models/messages")
+const messages=require("../models/messages");
+const {sendMail}=require("../utilities/mail")
 
 const createNewMessage= async (req, res) => {
     try {
@@ -18,8 +19,6 @@ const getMessage=async(req,res)=>{
     if(!mid) return res.status(400).json({status:"failed",message:"Missing message id"})
     const message=await messages.findById(mid)
     if(!message) return res.status(404).json({status:"failed",message:"No such message found"})
-    message.readBy.push(req.user._id)
-    await message.save()
     res.status(200).json({status:"successful",message})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal server error"})
@@ -29,8 +28,8 @@ const getMessage=async(req,res)=>{
 
 const getUnreadMessages=async(req,res)=>{
   try{
-    const allUnreadMessages=await messages.find({readBy:{$nin:[req.user._id]}})
-    res.status(200).json({status:"successful",messages:allMessages})
+    const allUnreadMessages=await messages.find({read:false}).sort({createdAt:-1})
+    res.status(200).json({status:"successful",messages:allUnreadMessages})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal server error"})
     console.log(err)

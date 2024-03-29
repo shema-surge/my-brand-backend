@@ -5,10 +5,23 @@ const notificationsSchema=new Schema({
         type:String,
         required:true
     },
-    readBy:[Types.ObjectId],
+    read:{
+        type:Boolean,
+        default:false
+    },
     createdAt:{
         type:Date,
         default:Date.now()
+    }
+})
+
+notificationsSchema.post('findOne',async(doc,next)=>{
+    try{
+        doc.read=true
+        await doc.save()
+        next()
+    }catch(err){
+        console.log(err)
     }
 })
 

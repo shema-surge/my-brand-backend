@@ -4,16 +4,25 @@ const users=require('../models/users')
 
 const authenticateUser=async(req,res,next)=>{
     try{
-        const cookie=req.cookies
-        if(!cookie || !cookie.token) return res.status(400).json({status:"failed",message:"Please Login Again"})
-        const payload=jwt.verify(cookie.token,process.env.JWT_SECRET)
+        const authHeader=req.headers.authorization
+        if(!authHeader) return res.status(400).json({status:"failed",message:"Missing Authorization header"})
+        const token=authHeader.split(' ')[1]
+        if(!token) return res.status(400).json({status:"failed",message:"No Authentcation token"})
+        const payload=jwt.verify(token,process.env.JWT_SECRET)
         const user=await users.findOne({_id:payload.userId})
         if(!user) return res.status(401).json({status:"failed",message:"Wrong email or password"})
         req.user=user
         next()
     }catch(err){
+        //check if req.path is /post/:id due to optional auth
+        if(/^\/posts\/[0-9a-f]{24}$/g.test(req.path)){
+            next()
+            return
+        }
+
         //check err if expired and ask to please login again
         if(err.name==="TokenExpiredError") return res.status(401).json({status:"failed",message:"Authentication token has expired, Please login again"})
+
         res.status(500).json({status:"failed",message:"Internal Server Error"})
         console.log(err)
     }
