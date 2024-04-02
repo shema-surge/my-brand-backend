@@ -15,4 +15,12 @@ const likeSchema=new Schema({
     }
 })
 
+/*likeSchema.post('save',async(doc,next)=>{
+    try{
+
+    }catch(err){
+        next(err)
+    }
+})*/
+
 module.exports=model('likes',likeSchema)

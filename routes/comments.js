@@ -8,7 +8,7 @@ const router=Router()
 
 router.get('/:pid',getPostComments)
 router.post("/newComment/:pid",authenticateUser,createNewComment);
-router.post("/likeComment/:cid",authenticateUser,likeComment)
+router.get("/likeComment/:cid",authenticateUser,likeComment)
 router.put('/editComment/:cid',authenticateUser,editComment)
 router.delete("/deleteComment/:cid",authenticateUser,deleteComment)
 

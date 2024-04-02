@@ -74,6 +74,7 @@ const editPost=async(req,res)=>{
 
 const deletePost=async(req,res)=>{
   try{
+    const {pid}=req.params
     if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
     const deletedPost=await posts.findByIdAndDelete(pid)
     res.json({status:"successfull",post:deletedPost})
