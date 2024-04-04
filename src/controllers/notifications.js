@@ -24,7 +24,7 @@ const getNotifications=async(req,res)=>{
 const deleteNotification=async(req,res)=>{
     try{
         const {nid}=req.params
-        if(!nid) return res.status(400).json({status:"sauccessfull",message:"Missing notification id"})
+        if(!nid) return res.status(400).json({status:"failed",message:"Missing notification id"})
         const deletedNotification=await notifications.findByIdAndDelete(nid)
         if(!deleteNotification) return res.status(404).json({status:"failed",message:"No such notification found"})
         res.status(200).json({status:"successfull",notification:deletedNotification})

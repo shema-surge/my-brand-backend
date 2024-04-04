@@ -28,23 +28,24 @@ const messageSchema=new Schema({
     }
 })
 
+const messagesModel=model('messages',messageSchema)
+
 messageSchema.post('findOne',async(doc,next)=>{
     try{
-        doc.read=true
-        await doc.save()
+        messagesModel.findByIdAndUpdate(doc._id,{read:true})
         next()
     }catch(err){
-        console.log(err)
+        next(err)
     }
 })
 
 messageSchema.post('save',async(doc,next)=>{
     try{
-        await notifications.create({content:`New message from email: ${doc.email},subject: ${doc.subject}`})
+        await notifications.create({access:'admins',content:`New message from email: ${doc.email},subject: ${doc.subject}`})
         next()
     }catch(err){
-        console.log(err)
+        next(err)
     }
 })
 
-module.exports=model('messages',messageSchema)
+module.exports=messagesModel

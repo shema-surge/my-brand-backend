@@ -69,8 +69,11 @@ const replyToMessage=async(req,res)=>{
 
 const deleteMessage=async(req,res)=>{
   try{
-    const {mid}=req.query
+    console.log("hello")
+    const {mid}=req.params
+    if(!mid) return res.status(400).json({status:"failed",message:"Missing message id"})
     const deletedMessage=await messages.findByIdAndDelete(mid)
+    if(!deletedMessage) return res.status(404).json({status:"failed",message:"No such message found"})
     res.status(200).json({status:"successful",message:deletedMessage})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal server error"})

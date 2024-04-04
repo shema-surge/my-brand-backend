@@ -1,9 +1,17 @@
 const {Schema,model, Types}=require("mongoose")
 
 const notificationsSchema=new Schema({
+    user:{
+        type:Types.ObjectId
+    },
     content:{
         type:String,
         required:true
+    },
+    access:{
+        type:String,
+        enum:['private','admins','users'],
+        default:'users'
     },
     read:{
         type:Boolean,
@@ -13,6 +21,12 @@ const notificationsSchema=new Schema({
         type:Date,
         default:Date.now()
     }
+})
+
+
+notificationsSchema.pre('save',(next)=>{
+    if(!this.user) this.access='private'
+    next()
 })
 
 notificationsSchema.post('findOne',async(doc,next)=>{

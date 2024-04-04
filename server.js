@@ -15,12 +15,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 
 //routes
-const mainRouter=require("./routes/main")
-const postsRouter=require("./routes/posts")
-const commentRouter=require("./routes/comments")
-const messageRouter=require("./routes/messages")
-const userRouter=require("./routes/users")
-const notificationRouter=require('./routes/notifications')
+const mainRouter=require("./src/routes/main")
+const postsRouter=require("./src/routes/posts")
+const commentRouter=require("./src/routes/comments")
+const messageRouter=require("./src/routes/messages")
+const userRouter=require("./src/routes/users")
+const notificationRouter=require('./src/routes/notifications')
 
 app.use("/",mainRouter)
 app.use("/posts",postsRouter)

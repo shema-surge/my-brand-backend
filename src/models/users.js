@@ -30,4 +30,13 @@ const userSchema=new Schema({
     }
 },{timestamps:true})
 
+userSchema.post('save',async(doc,next)=>{
+    try{
+        await notifications.create({content:`New user: ${doc.name} joined the blog!`})
+        next()
+    }catch(err){
+        next(err)
+    }
+})
+
 module.exports=model('users',userSchema)

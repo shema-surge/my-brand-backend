@@ -25,8 +25,8 @@ const commentSchema=new Schema({
 commentSchema.post('save',async(doc,next)=>{
     try{
         const post=await posts.findById(doc.parent)
-        post.comments+=1
-        await post.save()
+        if(!post) throw new Error("No such post found")
+        await posts.findByIdAndUpdate(doc.parent,{$inc:{comments:1}})
     }catch(err){
         next(err)
     }
@@ -36,7 +36,9 @@ commentSchema.post('save',async(doc,next)=>{
     try{
         const user=await users.findById(doc.author)
         const post=await posts.findById(doc.parent)
-        await notifications.create({content:`user ${user.name} added a new comment on post titled: ${post.title}`})
+        if(!user) throw new Error("No such user found")
+        if(!post) throw new Error("No such post found")
+        await notifications.create({user:user._id,content:`user ${user.name} added a new comment on post titled: ${post.title}`})
     }catch(err){
         next(err)
     }
@@ -46,8 +48,8 @@ commentSchema.post('save',async(doc,next)=>{
 commentSchema.post('deleteOne',async(doc,next)=>{
     try{
         const post=await posts.findById(doc.parent)
-        if(post.comments) post.comments-=1
-        await post.save()
+        if(!post) throw new Error("No such post found")
+        if(post.comments>0) await posts.findByIdAndUpdate(doc.parent,{$inc:{comments:-1}})
     }catch(err){
         next(err)
     }
