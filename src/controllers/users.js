@@ -4,7 +4,7 @@ const bcrypt=require("bcrypt")
 
 const users=require("../models/users")
 const keys = require("../models/keys")
-const {sendMail}=require("../utilities/mail")
+const {sendMail}=require("../helpers/mail")
 const { NONAME } = require("dns")
 
 //cloudinary configuration
@@ -48,7 +48,7 @@ const signup=async (req, res) => {
       </html>
       `)
 
-      res.status(200).json({status:"successfull",message:"Signup complete, Please Activate Your Account Via The Link Sent To Your Email"})
+      res.status(200).json({status:"successfull",message:"Signup complete, Please Activate Your Account Via The Link Sent To Your Email",activation:activationKey})
     } catch (err) {
       console.log(err);
       return res.status(500).json({status:"failed",message:"Internal Server Error"})

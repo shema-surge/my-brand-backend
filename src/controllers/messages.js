@@ -1,5 +1,5 @@
 const messages=require("../models/messages");
-const {sendMail}=require("../utilities/mail")
+const {sendMail}=require("../helpers/mail")
 
 const createNewMessage= async (req, res) => {
     try {
