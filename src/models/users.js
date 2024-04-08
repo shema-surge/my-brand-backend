@@ -21,7 +21,7 @@ const userSchema=new Schema({
     },
     profileImg:{
         type:String,
-        default: "User-Profile-PNG-Image 1.png"
+        default: "https://res.cloudinary.com/upgeek/image/upload/v1711647508/o9venw9juzwmni9srzdi.png"
     },
     status:{
         type:String,
@@ -29,14 +29,5 @@ const userSchema=new Schema({
         default:"inactive"
     }
 },{timestamps:true})
-
-userSchema.post('save',async(doc,next)=>{
-    try{
-        await notifications.create({content:`New user: ${doc.name} joined the blog!`})
-        next()
-    }catch(err){
-        next(err)
-    }
-})
 
 module.exports=model('users',userSchema)

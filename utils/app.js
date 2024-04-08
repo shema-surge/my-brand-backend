@@ -7,6 +7,7 @@ const commentRouter = require("../src/routes/comments")
 const messageRouter = require("../src/routes/messages")
 const userRouter = require("../src/routes/users")
 const notificationRouter = require('../src/routes/notifications')
+const keysRouter = require("../src/routes/keys")
 
 const createServer = () => {
     const app = express();
@@ -24,6 +25,7 @@ const createServer = () => {
     app.use("/messages", messageRouter)
     app.use("/users", userRouter)
     app.use("/notifications", notificationRouter)
+    app.use("/keys",keysRouter)
 
     return app
 }

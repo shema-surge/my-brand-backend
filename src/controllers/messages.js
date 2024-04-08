@@ -1,4 +1,5 @@
 const messages=require("../models/messages");
+const notifications=require("../models/notifications")
 const {sendMail}=require("../helpers/mail")
 
 const createNewMessage= async (req, res) => {
@@ -6,6 +7,7 @@ const createNewMessage= async (req, res) => {
       const { name,email,subject,message } = req.body;
       if (!name || !email || !subject || !message) return res.status(400).json({status:"failed",message:"Missing data fields"})
       const newMessage=await messages.create({ name,email,subject,message });
+      await notifications.create({content:`New message from email: ${newMessage.email},subject: ${newMessage.subject}`})
       res.status(200).json({status:"successful",message:newMessage})
     } catch (err) {
       res.status(500).json({status:"failed",message:"Internal server error"})
@@ -19,6 +21,8 @@ const getMessage=async(req,res)=>{
     if(!mid) return res.status(400).json({status:"failed",message:"Missing message id"})
     const message=await messages.findById(mid)
     if(!message) return res.status(404).json({status:"failed",message:"No such message found"})
+    message.read=true
+    await message.save()
     res.status(200).json({status:"successful",message})
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal server error"})

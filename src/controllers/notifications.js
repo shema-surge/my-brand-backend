@@ -14,7 +14,12 @@ const getNotification=async(req,res)=>{
 
 const getNotifications=async(req,res)=>{
     try{
-        const allUserNotifications=await notifications.find().sort({createdAt:-1})
+        let allUserNotifications
+        if(req.user.role==="admin"){
+            allUserNotifications=await notifications.find({user:{$in:[req.user._id,null]}}).sort({createdAt:-1})
+        }else{
+            allUserNotifications=await notifications.find({user:req.user._id}).sort({createdAt:-1})
+        }
         res.status(200).json({status:"successfull",notifications:allUserNotifications})
     }catch(err){
         res.status(500).json({status:"failed",message:"Internal Server Error"})
@@ -25,7 +30,12 @@ const deleteNotification=async(req,res)=>{
     try{
         const {nid}=req.params
         if(!nid) return res.status(400).json({status:"failed",message:"Missing notification id"})
-        const deletedNotification=await notifications.findByIdAndDelete(nid)
+        let deletedNotification
+        if(req.user.role==="admin"){
+            deletedNotification=await notifications.deleteOne({_id:nid,user:{$in:[req.user._id,null]}})
+        }else{
+            deletedNotification=await notifications.deleteOne({_id:nid,user:req.user._id})
+        }
         if(!deleteNotification) return res.status(404).json({status:"failed",message:"No such notification found"})
         res.status(200).json({status:"successfull",notification:deletedNotification})
     }catch(err){

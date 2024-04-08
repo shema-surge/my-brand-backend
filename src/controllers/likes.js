@@ -1,4 +1,5 @@
 const posts=require("../models/posts")
+const notifications=require("../models/notifications.js")
 const comments=require("../models/comments.js")
 const likes=require("../models/likes")
 
@@ -10,19 +11,23 @@ const likePost=async(req,res)=>{
 
       let like=await likes.findOne({recipient:pid,user:req.user.id})
       const post=await posts.findById(pid)
+
       if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
 
-      const updatedPost=null
+      await notifications.create({user:post.author,content:`User ${req.user.name} liked your  on post titled ${post.title}`})
+
       if(!like){
         await likes.create({recipient:pid,user:req.user._id})
-        updatedPost=await posts.findByIdAndUpdate(pid,{$inc:{likes:1}},{new:true})
+        post.likes+=1
+        await post.save()
       }else{
         await likes.deleteOne({recipient:pid,user:req.user._id})
-        updatedPost=await posts.findByIdAndUpdate(pid,{$inc:{likes:-1}},{new:true})
+        post.likes-=1
+        await post.save()
       }
       
       await post.save()
-      res.json({status:"successful",post:updatedPost})
+      res.json({status:"successful",post})
     }catch(err){
       res.status(500).json({status:"failed",message:"Internal Server Error"})
       console.log(err)
@@ -39,16 +44,20 @@ const likeComment=async(req,res)=>{
       const comment=await comments.findById(cid)
       if(!comment) return res.status(404).json({status:"failed",message:"No such comment found"})
 
-      let updatedComment=null
+      const post=await posts.findById(comment.parent)
+      if(!post) return res.status(404).json({status:"failed",message:"Post associated with this comment no longer exists"})
 
       if(!like){
         await likes.create({recipient:cid,user:req.user._id})
-        updatedComment=await comments.findByIdAndUpdate(cid,{$inc:{likes:1}},{new:true})
+        comment.likes+=1
+        await comment.save()
+        await notifications.create({user:comment.author,content:`User ${req.user.name} liked your comment on post titled ${post.title}`})
       }else{
         await likes.deleteOne({recipient:cid,user:req.user._id})
-        updatedComment=await comments.findByIdAndUpdate(cid,{$inc:{likes:-1}},{new:true})
+        if(comment.likes>0) comment.likes-=1
+        await comment.save()
       }
-      res.json({status:"successfull",comment:updatedComment})
+      res.json({status:"successfull",comment})
     }catch(err){
       console.log(err)
       res.status(500).json({status:"failed",message:"Internal Server Error"})

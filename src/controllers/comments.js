@@ -1,5 +1,6 @@
 const posts=require("../models/posts")
 const comments=require("../models/comments")
+const notifications=require("../models/notifications")
 const users=require("../models/users")
 
 const getPostComments=async(req,res)=>{
@@ -10,14 +11,9 @@ const getPostComments=async(req,res)=>{
     const post=await posts.findById(pid)
     if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
 
-    const allPostComments=await comments.find({parent:pid}).sort({createdAt:-1})
-    const promiseArray=allPostComments.map(async(comment)=>{
-      const author=await users.findById(comment.author)
-      return {...comment,author:author}
-    })
-    const modifiedComments=await Promise.all(promiseArray)
+    const allPostComments=await comments.find({parent:pid}).populate('author').sort({createdAt:-1})
     
-    res.status(200).json({status:"successfull",comments:modifiedComments})
+    res.status(200).json({status:"successfull",comments:allPostComments})
 
   }catch(err){
     res.status(500).json({status:"failed",message:"Internal Server Error"})
@@ -37,6 +33,10 @@ const createNewComment=async(req,res)=>{
      if(!post) return res.status(404).json({status:"failed",message:"No such post found"})
 
      const comment=await comments.create({parent:post._id,author:req.user._id,content})
+     post.comments+=1
+     await post.save()
+
+     await notifications.create({user:post.author,content:`user ${req.user.name} added a new comment on post titled: ${post.title}`})
 
       res.status(200).json({status:"successfull",comment})
 
@@ -67,6 +67,11 @@ const deleteComment=async(req,res)=>{
     if(!cid) return res.status(400).json({status:"failed",message:"Missing comment id"})
     const deletedComment=await comments.findByIdAndDelete(cid)
     if(!deletedComment) return res.status(404).json({status:"failed",message:"No such comment found"})
+    const post=await posts.findById(deletedComment.parent)
+    if(post){
+      if(post.comments>0) post.comments-=1
+      await post.save()
+    }
     res.status(200).json({status:"successful",comment:deletedComment})
   }catch(err){
     res.status(500).json({status:"failed"})

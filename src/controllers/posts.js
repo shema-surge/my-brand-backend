@@ -1,3 +1,4 @@
+const notifications = require("../models/notifications");
 const posts=require("../models/posts");
 const views=require("../models/views")
 
@@ -36,16 +37,47 @@ const createNewPost=async(req,res)=>{
     }
 }
 
+const searchAllPosts=async(req,res)=>{
+  try{
+    const {keyword}=req.body
+    let allPosts
+    if(!keyword){
+      allPosts=await posts.find().sort({createdAt:-1})
+    }else{
+      allPosts=await posts.find({title:{$regex:new RegExp(keyword,"i")}}).sort({createdAt:-1});
+    }
+    res.status(200).json({status:"successful",posts:allPosts})
+  }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
+    console.log(err)
+  }
+}
+
+const searchUserPosts=async(req,res)=>{
+  try{
+    const {keyword}=req.body
+    let allUserPosts
+    if(!keyword){
+      allUserPosts=await posts.find({author:req.user._id}).sort({createdAt:-1});
+    }else{
+      allUserPosts=await posts.find({author:req.user._id,title:{$regex:new RegExp(keyword,"i")}}).sort({createdAt:-1});
+    }
+    res.status(200).json({status:"successful",posts:allUserPosts})
+  }catch(err){
+    res.status(500).json({status:"failed",message:"Internal Server Error"})
+    console.log(err)
+  }
+}
+
 const getPost=async(req,res)=>{
   try{
     const {pid}=req.params
-    const {uid}=req.body
     if(!pid) return res.status(400).json({status:"failed",message:"Missing Post id"})
     const post=await posts.findById(pid)
     if(!post) return res.status(400).json({status:"failed",message:"No such post found"})
-    if(uid){    
-      const view=await views.findOne({post:pid,user:uid})
-      if(!view) await views.create({post:pid,user:uid})
+    if(req.user){    
+      const view=await views.findOne({post:pid,user:req.user._id})
+      if(!view) await views.create({post:pid,user:req.user._id})
     }
     res.json({status:"successful",post})
   }catch(err){
@@ -84,4 +116,4 @@ const deletePost=async(req,res)=>{
   }
 }
 
-module.exports={getAllPosts,getUserPosts,createNewPost,deletePost,editPost,getPost}
+module.exports={getAllPosts,getUserPosts,createNewPost,deletePost,editPost,getPost,searchUserPosts,searchAllPosts}

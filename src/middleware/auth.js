@@ -15,7 +15,7 @@ const authenticateUser=async(req,res,next)=>{
         next()
     }catch(err){
         //check if req.path is /post/:id due to optional auth
-        if(/^\/posts\/[0-9a-f]{24}$/g.test(req.path)){
+        if(/^\/posts\/post\/[0-9a-f]{24}$/g.test(req.path)){
             next()
             return
         }
